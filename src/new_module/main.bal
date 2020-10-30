@@ -133,8 +133,8 @@ function tableCreations(jdbc:Client jdbcClient) returns int|string|sql:Error??{
     result = createDateTimeTable(jdbcClient);
     result = createBooleanTable(jdbcClient);
     result = createEnumTable(jdbcClient);
-    // result = createMoneyTable(jdbcClient);
-    // result = createCharacterTable(jdbcClient);
+    result = createGeometricTable(jdbcClient);
+    result = createNetworkTable(jdbcClient);
     // result = createMoneyTable(jdbcClient);
     // result = createCharacterTable(jdbcClient);
     // result = createMoneyTable(jdbcClient);
@@ -269,7 +269,6 @@ function createBooleanTable(jdbc:Client jdbcClient) returns int|string|sql:Error
     string tableName = "booleanTypes";
 
         CreateQueries createTableQuery = createQueryMaker({
-            //Need to test with timezone and without time zone. And also several ways in interval type need to test.
             "ID": "SERIAL", 
             "booleanType":"boolean"
         },"ID");
@@ -291,9 +290,60 @@ function createEnumTable(jdbc:Client jdbcClient) returns int|string|sql:Error??{
    string tableName = "enumTypes";
 
         CreateQueries createTableQuery = createQueryMaker({
-            //Need to test with timezone and without time zone. And also several ways in interval type need to test.
             "ID": "SERIAL", 
             "enumType":"enumValues"
+        },"ID");
+
+        int|string|sql:Error? initResult = initializeTable(jdbcClient, tableName , createTableQuery.createQuery);
+        if (initResult is int) {
+            io:println("Sample executed successfully!");
+        } 
+        else if (initResult is sql:Error) {
+            io:println("Customer table initialization failed: ", initResult);
+    }
+
+    return initResult;
+
+}
+
+function createGeometricTable(jdbc:Client jdbcClient) returns int|string|sql:Error??{
+
+   string tableName = "geometricTypes";
+
+        CreateQueries createTableQuery = createQueryMaker({
+            "ID": "SERIAL", 
+            "pointType":"point",
+            "lineType":"line",
+            "lsegType":"lseg",
+            "boxType":"box",
+            "pathType":"path",
+            "polygonType":"polygon",
+            "circleType":"circle"
+        },"ID");
+
+        int|string|sql:Error? initResult = initializeTable(jdbcClient, tableName , createTableQuery.createQuery);
+        if (initResult is int) {
+            io:println("Sample executed successfully!");
+        } 
+        else if (initResult is sql:Error) {
+            io:println("Customer table initialization failed: ", initResult);
+    }
+
+    return initResult;
+
+}
+
+
+function createNetworkTable(jdbc:Client jdbcClient) returns int|string|sql:Error??{
+
+   string tableName = "networkTypes";
+
+        CreateQueries createTableQuery = createQueryMaker({
+            "ID": "SERIAL", 
+            "inetType":"inet",
+            "cidrType":"cidr",
+            "macaddrType":"macaddr",
+            "macaddr8Type":"macaddr8"
         },"ID");
 
         int|string|sql:Error? initResult = initializeTable(jdbcClient, tableName , createTableQuery.createQuery);
