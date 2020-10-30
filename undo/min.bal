@@ -7,8 +7,31 @@ public type Queries record {
     string insertQuery;
     string tableName;
 };
+public type CreateQueries record {
+    string createQuery;
+    string tableName;
+};
+public type InsertQueries record {
+    string insertQuery;
+    string tableName;
+};
 
-// function insertTable()
+function insertQueryMaker(map<string> args) returns insertQuery{
+
+    string insertQuery = "";
+    string columns = "";
+    string values = "";
+
+    insertQuery += "("
+
+
+    foreach var [column,value] in args.entries() {
+       columns += coumn +",";
+       values += value + ",";
+    }
+
+
+} 
 
 
 function initializeTable(jdbc:Client jdbcClient, string tableName,string createQuery, string insertQuery) returns int|string|sql:Error? {
@@ -31,11 +54,14 @@ function initializeTable(jdbc:Client jdbcClient, string tableName,string createQ
 
 public function createQueryMaker(map<string> args, string primarykey) returns Queries{
     
+    string[] t = ["1","2","3","4","5"];
+    io:println("a");
+
     string createQuery = "";
     createQuery += "(";
 
-     foreach var [name,datatype] in args.entries() {
-        createQuery += name + " " + datatype+", ";
+    foreach var [name,datatype] in args.entries() {
+    createQuery += name + " " + datatype+", ";
     }
     createQuery += "PRIMARY KEY("+primarykey+")";
     createQuery += ")";
@@ -55,6 +81,7 @@ public function createQueryMaker(map<string> args, string primarykey) returns Qu
 }
 
 public function main() {
+    io:println("aaaa");
     jdbc:Client|sql:Error jdbcClient =  new ("jdbc:postgresql://localhost:5432/datatypes","postgres","postgres");
            
     if (jdbcClient is jdbc:Client) {
