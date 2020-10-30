@@ -116,7 +116,7 @@ public function main() {
         InsertQueries insertTableQuery = insertQueryMaker({
 
             // "firstName":"Peter","lastName": "Stuward", "registrationID": "1", "creditLimit": "5000.01","country": "USA"
-            "firstName":"'Peter'","lastName": "'Stuward'", "registrationID": "1", "creditLimit": "5000.01","country": "'USA'"
+            "firstName":"'Peter'","lastName": "'Stuward'", "registrationID": "1", "creditLimit": "5000.11","country": "'USA'"
 
 
         });
