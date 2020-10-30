@@ -16,6 +16,22 @@ public type InsertQueries record {
     // string tableName;
 };
 
+function setUp(jdbc:Client jdbcClient) returns sql:Error|sql:ExecutionResult{
+
+    sql:ExecutionResult|sql:Error result; 
+
+    result = jdbcClient->execute("Drop type enumValues if exists");
+    
+    result = jdbcClient->execute("CREATE TYPE enumValues AS ENUM ('value1','value2','value3')");
+
+    if(result is sql:Error){
+        io:println("Error occurred while creating the enum type..");
+        io:println(result);
+    }
+    return result;
+
+}
+
 function insertQueryMaker(map<string> args) returns InsertQueries{
 
     string insertQuery = "";
@@ -93,6 +109,8 @@ public function main() {
            
     if (jdbcClient is jdbc:Client) {
 
+        sql:Error|sql:ExecutionResult result = setUp(jdbcClient);
+
         int|string|sql:Error?? err = tableCreations(jdbcClient);
         
         sql:Error? e = jdbcClient.close();   
@@ -106,9 +124,21 @@ public function main() {
 
 function tableCreations(jdbc:Client jdbcClient) returns int|string|sql:Error??{
 
-    int|string|sql:Error?? result = createNumericTable(jdbcClient);
+    int|string|sql:Error?? result;
+
+    result = createNumericTable(jdbcClient);
     result = createMoneyTable(jdbcClient);
     result = createCharacterTable(jdbcClient);
+    result = createBinaryTable(jdbcClient);
+    result = createDateTimeTable(jdbcClient);
+    result = createBooleanTable(jdbcClient);
+    result = createEnumTable(jdbcClient);
+    // result = createMoneyTable(jdbcClient);
+    // result = createCharacterTable(jdbcClient);
+    // result = createMoneyTable(jdbcClient);
+    // result = createCharacterTable(jdbcClient);
+    // result = createMoneyTable(jdbcClient);
+    // result = createCharacterTable(jdbcClient);
 
      return result;   
 
@@ -170,8 +200,100 @@ function createCharacterTable(jdbc:Client jdbcClient) returns int|string|sql:Err
             "ID": "SERIAL", 
             "charType":"char(10)",
             "varcharType":"varchar(10)",
+            "textType":"text",
             "nameType":"name",
             "charWithoutLengthType": "char"
+        },"ID");
+
+        int|string|sql:Error? initResult = initializeTable(jdbcClient, tableName , createTableQuery.createQuery);
+        if (initResult is int) {
+            io:println("Sample executed successfully!");
+        } 
+        else if (initResult is sql:Error) {
+            io:println("Customer table initialization failed: ", initResult);
+    }
+
+    return initResult;
+
+}
+
+function createBinaryTable(jdbc:Client jdbcClient) returns int|string|sql:Error??{
+
+    string tableName = "binaryTypes";
+
+        CreateQueries createTableQuery = createQueryMaker({
+
+            "ID": "SERIAL", 
+            "byteaType":"bytea"    //Two types need to test. bytea hexa type and bytea escape type.
+        },"ID");
+
+        int|string|sql:Error? initResult = initializeTable(jdbcClient, tableName , createTableQuery.createQuery);
+        if (initResult is int) {
+            io:println("Sample executed successfully!");
+        } 
+        else if (initResult is sql:Error) {
+            io:println("Customer table initialization failed: ", initResult);
+    }
+
+    return initResult;
+
+}
+
+function createDateTimeTable(jdbc:Client jdbcClient) returns int|string|sql:Error??{
+
+    string tableName = "dateTimeTypes";
+
+        CreateQueries createTableQuery = createQueryMaker({
+            //Need to test with timezone and without time zone. And also several ways in interval type need to test.
+            "ID": "SERIAL", 
+            "timestampType":"timestamp",
+            "dateType":"date",
+            "timeType":"time",
+            "intervalType":"interval"
+        },"ID");
+
+        int|string|sql:Error? initResult = initializeTable(jdbcClient, tableName , createTableQuery.createQuery);
+        if (initResult is int) {
+            io:println("Sample executed successfully!");
+        } 
+        else if (initResult is sql:Error) {
+            io:println("Customer table initialization failed: ", initResult);
+    }
+
+    return initResult;
+
+}
+
+function createBooleanTable(jdbc:Client jdbcClient) returns int|string|sql:Error??{
+
+    string tableName = "booleanTypes";
+
+        CreateQueries createTableQuery = createQueryMaker({
+            //Need to test with timezone and without time zone. And also several ways in interval type need to test.
+            "ID": "SERIAL", 
+            "booleanType":"boolean"
+        },"ID");
+
+        int|string|sql:Error? initResult = initializeTable(jdbcClient, tableName , createTableQuery.createQuery);
+        if (initResult is int) {
+            io:println("Sample executed successfully!");
+        } 
+        else if (initResult is sql:Error) {
+            io:println("Customer table initialization failed: ", initResult);
+    }
+
+    return initResult;
+
+}
+
+function createEnumTable(jdbc:Client jdbcClient) returns int|string|sql:Error??{
+
+   string tableName = "enumTypes";
+
+        CreateQueries createTableQuery = createQueryMaker({
+            //Need to test with timezone and without time zone. And also several ways in interval type need to test.
+            "ID": "SERIAL", 
+            "enumType":"enumValues"
         },"ID");
 
         int|string|sql:Error? initResult = initializeTable(jdbcClient, tableName , createTableQuery.createQuery);
