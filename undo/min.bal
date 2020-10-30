@@ -33,6 +33,21 @@ function insertQueryMaker(map<string> args) returns insertQuery{
 
 } 
 
+            // InsertQueries insertTableQuery = insertQueryMaker({
+
+            //     "firstName":"Peter","lastName": "Stuward", "registrationID": "1", "creditLimit": "5000.01","country": "USA"
+            //     // "firstName":"'Peter'","lastName": "'Stuward'", "registrationID": "1", "creditLimit": "5000.11","country": "'USA'"
+
+
+            // });
+            
+
+
+    // result = check jdbcClient->execute("INSERT INTO " + tableName+" " +insertQuery);
+
+    // io:println("Rows affected: ", result.affectedRowCount);
+    // io:println("Generated Customer ID: ", result.lastInsertId);
+
 
 function initializeTable(jdbc:Client jdbcClient, string tableName,string createQuery, string insertQuery) returns int|string|sql:Error? {
 

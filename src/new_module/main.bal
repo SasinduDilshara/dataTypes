@@ -26,7 +26,7 @@ function insertQueryMaker(map<string> args) returns InsertQueries{
 
     foreach var [column,value] in args.entries() {
        columns += column +",";
-       values += value + ",";
+       values += "'"+value+"'" + ",";
     }
     int columnLength = columns.length();
     int valueLength = values.length();
@@ -47,37 +47,25 @@ function insertQueryMaker(map<string> args) returns InsertQueries{
 
 } 
 
-// function insertTable()
+// function insertTable() int|string|sql:Error?
 
 
-function initializeTable(jdbc:Client jdbcClient, string tableName,string createQuery, string insertQuery) returns int|string|sql:Error? {
+function initializeTable(jdbc:Client jdbcClient, string tableName,string createQuery) returns int|string|sql:Error? {
 
     sql:ExecutionResult result =  check jdbcClient->execute("DROP TABLE IF EXISTS "+tableName);
 
     io:println("Drop table executed. ", result);
 
     result = check jdbcClient->execute("CREATE TABLE IF NOT EXISTS " + tableName +" "+ createQuery);
-
-    result = check jdbcClient->execute("INSERT INTO " + tableName+" " +insertQuery);
-
-    io:println("Rows affected: ", result.affectedRowCount);
-    io:println("Generated Customer ID: ", result.lastInsertId);
     
-    return result.lastInsertId;
+    return result.affectedRowCount;
 
 
 }
 
 public function createQueryMaker(map<string> args, string primarykey) returns CreateQueries{
 
-    string[] a = ["1","2","3","4","5"];
-    string columns1 = "";
-    foreach var column in a {
-       columns1 += column +",";
-    }
-    int length = columns1.length();
-    string c = columns1.substring(0,length-1);
-    io:println(c);
+    io:println("Table create query initializing....");
     
 
     string createQuery = "";
@@ -105,31 +93,8 @@ public function main() {
            
     if (jdbcClient is jdbc:Client) {
 
-        string tableName = "Test2";
-
-        CreateQueries createTableQuery = createQueryMaker({
-
-            "customerId": "SERIAL", "firstName":"VARCHAR(300)","lastName": "VARCHAR(300)", "registrationID": "INTEGER", "creditLimit": "real","country": "VARCHAR(300)"
-
-        },"customerId");
-
-        InsertQueries insertTableQuery = insertQueryMaker({
-
-            // "firstName":"Peter","lastName": "Stuward", "registrationID": "1", "creditLimit": "5000.01","country": "USA"
-            "firstName":"'Peter'","lastName": "'Stuward'", "registrationID": "1", "creditLimit": "5000.11","country": "'USA'"
-
-
-        });
-
-
+        int|string|sql:Error?? err = tableCreations(jdbcClient);
         
-        int|string|sql:Error? initResult = initializeTable(jdbcClient, tableName , createTableQuery.createQuery,insertTableQuery.insertQuery);
-        if (initResult is int) {
-            io:println("Sample executed successfully!");
-        } 
-        else if (initResult is sql:Error) {
-            io:println("Customer table initialization failed: ", initResult);
-        }
         sql:Error? e = jdbcClient.close();   
     } 
     else {
@@ -137,6 +102,90 @@ public function main() {
         io:println(jdbcClient);
     }
 }
+
+
+function tableCreations(jdbc:Client jdbcClient) returns int|string|sql:Error??{
+
+    int|string|sql:Error?? result = createNumericTable(jdbcClient);
+    result = createMoneyTable(jdbcClient);
+    result = createCharacterTable(jdbcClient);
+
+     return result;   
+
+
+}
+
+function createNumericTable(jdbc:Client jdbcClient) returns int|string|sql:Error??{
+
+    string tableName = "numericTypes";
+
+        CreateQueries createTableQuery = createQueryMaker({
+
+            "ID": "SERIAL", "smallIntType":"smallInt","intType": "integer", "bigntType": "bigint", "decimalType": "decimal","numericType": "numeric",
+            "realType":"real", "doublePrecisionType":"double precision","smallSerialType":"smallserial", "serialType":"serial", "bigSerialType":"bigserial"
+
+        },"ID");
+
+        int|string|sql:Error? initResult = initializeTable(jdbcClient, tableName , createTableQuery.createQuery);
+        if (initResult is int) {
+            io:println("Sample executed successfully!");
+        } 
+        else if (initResult is sql:Error) {
+            io:println("Customer table initialization failed: ", initResult);
+    }
+
+    return initResult;
+
+}
+
+
+function createMoneyTable(jdbc:Client jdbcClient) returns int|string|sql:Error??{
+
+    string tableName = "moneyTypes";
+
+        CreateQueries createTableQuery = createQueryMaker({
+
+            "ID": "SERIAL", 
+            "MoneyType":"money"
+        },"ID");
+
+        int|string|sql:Error? initResult = initializeTable(jdbcClient, tableName , createTableQuery.createQuery);
+        if (initResult is int) {
+            io:println("Sample executed successfully!");
+        } 
+        else if (initResult is sql:Error) {
+            io:println("Customer table initialization failed: ", initResult);
+    }
+
+    return initResult;
+
+}
+
+function createCharacterTable(jdbc:Client jdbcClient) returns int|string|sql:Error??{
+
+    string tableName = "charTypes";
+
+        CreateQueries createTableQuery = createQueryMaker({
+
+            "ID": "SERIAL", 
+            "charType":"char(10)",
+            "varcharType":"varchar(10)",
+            "nameType":"name",
+            "charWithoutLengthType": "char"
+        },"ID");
+
+        int|string|sql:Error? initResult = initializeTable(jdbcClient, tableName , createTableQuery.createQuery);
+        if (initResult is int) {
+            io:println("Sample executed successfully!");
+        } 
+        else if (initResult is sql:Error) {
+            io:println("Customer table initialization failed: ", initResult);
+    }
+
+    return initResult;
+
+}
+
 
 
 
