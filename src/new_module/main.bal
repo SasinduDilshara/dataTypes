@@ -33,6 +33,67 @@ function setUp(jdbc:Client jdbcClient) returns sql:Error|sql:ExecutionResult{
         io:println("Error occurred while creating the enum type..");
         io:println(result);
     }
+
+    
+    result = jdbcClient->execute("DROP TYPE IF EXISTS complex CASCADE;");
+
+    if(result is sql:Error){
+        io:println("Error occurred while creating the complex type..");
+        io:println(result);
+    }
+    
+    result = jdbcClient->execute("CREATE TYPE complex AS (r double precision,i double precision)");
+
+    if(result is sql:Error){
+        io:println("Error occurred while creating the complex type..");
+        io:println(result);
+    }
+
+    result = jdbcClient->execute("DROP TYPE IF EXISTS inventory_item CASCADE;");
+
+    if(result is sql:Error){
+        io:println("Error occurred while creating the inventory_item type..");
+        io:println(result);
+    }
+    
+    result = jdbcClient->execute("CREATE TYPE inventory_item AS (name text,supplier_id integer,price numeric)");
+
+    if(result is sql:Error){
+        io:println("Error occurred while creating the inventory_item type..");
+        io:println(result);
+    }
+
+
+    result = jdbcClient->execute("DROP TYPE IF EXISTS floatrange CASCADE;");
+
+    if(result is sql:Error){
+        io:println("Error occurred while creating the floatrange type..");
+        io:println(result);
+    }
+    
+    result = jdbcClient->execute("CREATE TYPE floatrange AS RANGE (subtype = float8,subtype_diff = float8mi )");
+
+    if(result is sql:Error){
+        io:println("Error occurred while creating the floatrange type..");
+        io:println(result);
+    }
+
+
+    result = jdbcClient->execute("DROP Domain IF EXISTS posint CASCADE;");
+
+    if(result is sql:Error){
+        io:println("Error occurred while creating the posint domain..");
+        io:println(result);
+    }
+    
+    result = jdbcClient->execute("CREATE DOMAIN posint AS integer CHECK (VALUE > 0);");
+
+    if(result is sql:Error){
+        io:println("Error occurred while creating the posint domain..");
+        io:println(result);
+    }
+
+
     return result;
 
 }
@@ -67,8 +128,6 @@ function insertQueryMaker(map<string> args) returns InsertQueries{
 
 
 } 
-
-// function insertTable() int|string|sql:Error?
 
 
 function initializeTable(jdbc:Client jdbcClient, string tableName,string createQuery) returns int|string|sql:Error? {
@@ -116,7 +175,7 @@ public function main() {
 
         sql:Error|sql:ExecutionResult result = setUp(jdbcClient);
 
-        int|string|sql:Error?? err = tableCreations(jdbcClient);
+        int|string|sql:Error? err = tableCreations(jdbcClient);
         
         sql:Error? e = jdbcClient.close();   
     } 
@@ -127,9 +186,9 @@ public function main() {
 }
 
 
-function tableCreations(jdbc:Client jdbcClient) returns int|string|sql:Error??{
+function tableCreations(jdbc:Client jdbcClient) returns int|string|sql:Error?{
 
-    int|string|sql:Error?? result;
+    int|string|sql:Error? result;
 
     result = createNumericTable(jdbcClient);
     result = createMoneyTable(jdbcClient);
@@ -146,16 +205,19 @@ function tableCreations(jdbc:Client jdbcClient) returns int|string|sql:Error??{
     result = createXmlTable(jdbcClient);
     result = createJsonTable(jdbcClient);
     result = createArrayTable(jdbcClient);
-    // result = createTextSearchTable(jdbcClient);
-    // result = createUuidTable(jdbcClient);
-    // result = createXmlTable(jdbcClient);
-
+    result = createCompositeTable(jdbcClient);
+    result = createRangeTable(jdbcClient);
+    result = createDomainTable(jdbcClient);
+    result = createObjectIdentifierTable(jdbcClient);
+    result = createPglsnTable(jdbcClient);
+    // result = createPseudoTypeTable(jdbcClient);
+    
      return result;   
 
 
 }
 
-function createNumericTable(jdbc:Client jdbcClient) returns int|string|sql:Error??{
+function createNumericTable(jdbc:Client jdbcClient) returns int|string|sql:Error?{
 
     string tableName = "numericTypes";
 
@@ -179,7 +241,7 @@ function createNumericTable(jdbc:Client jdbcClient) returns int|string|sql:Error
 }
 
 
-function createMoneyTable(jdbc:Client jdbcClient) returns int|string|sql:Error??{
+function createMoneyTable(jdbc:Client jdbcClient) returns int|string|sql:Error?{
 
     string tableName = "moneyTypes";
 
@@ -201,7 +263,7 @@ function createMoneyTable(jdbc:Client jdbcClient) returns int|string|sql:Error??
 
 }
 
-function createCharacterTable(jdbc:Client jdbcClient) returns int|string|sql:Error??{
+function createCharacterTable(jdbc:Client jdbcClient) returns int|string|sql:Error?{
 
     string tableName = "charTypes";
 
@@ -227,7 +289,7 @@ function createCharacterTable(jdbc:Client jdbcClient) returns int|string|sql:Err
 
 }
 
-function createBinaryTable(jdbc:Client jdbcClient) returns int|string|sql:Error??{
+function createBinaryTable(jdbc:Client jdbcClient) returns int|string|sql:Error?{
 
     string tableName = "binaryTypes";
 
@@ -249,7 +311,7 @@ function createBinaryTable(jdbc:Client jdbcClient) returns int|string|sql:Error?
 
 }
 
-function createDateTimeTable(jdbc:Client jdbcClient) returns int|string|sql:Error??{
+function createDateTimeTable(jdbc:Client jdbcClient) returns int|string|sql:Error?{
 
     string tableName = "dateTimeTypes";
 
@@ -274,7 +336,7 @@ function createDateTimeTable(jdbc:Client jdbcClient) returns int|string|sql:Erro
 
 }
 
-function createBooleanTable(jdbc:Client jdbcClient) returns int|string|sql:Error??{
+function createBooleanTable(jdbc:Client jdbcClient) returns int|string|sql:Error?{
 
     string tableName = "booleanTypes";
 
@@ -295,7 +357,7 @@ function createBooleanTable(jdbc:Client jdbcClient) returns int|string|sql:Error
 
 }
 
-function createEnumTable(jdbc:Client jdbcClient) returns int|string|sql:Error??{
+function createEnumTable(jdbc:Client jdbcClient) returns int|string|sql:Error?{
 
    string tableName = "enumTypes";
 
@@ -316,7 +378,7 @@ function createEnumTable(jdbc:Client jdbcClient) returns int|string|sql:Error??{
 
 }
 
-function createGeometricTable(jdbc:Client jdbcClient) returns int|string|sql:Error??{
+function createGeometricTable(jdbc:Client jdbcClient) returns int|string|sql:Error?{
 
    string tableName = "geometricTypes";
 
@@ -344,7 +406,7 @@ function createGeometricTable(jdbc:Client jdbcClient) returns int|string|sql:Err
 }
 
 
-function createNetworkTable(jdbc:Client jdbcClient) returns int|string|sql:Error??{
+function createNetworkTable(jdbc:Client jdbcClient) returns int|string|sql:Error?{
 
    string tableName = "networkTypes";
 
@@ -368,7 +430,7 @@ function createNetworkTable(jdbc:Client jdbcClient) returns int|string|sql:Error
 
 }
 
-function createBitTable(jdbc:Client jdbcClient) returns int|string|sql:Error??{
+function createBitTable(jdbc:Client jdbcClient) returns int|string|sql:Error?{
 
    string tableName = "bitTypes";
 
@@ -393,7 +455,7 @@ function createBitTable(jdbc:Client jdbcClient) returns int|string|sql:Error??{
 }
 
 
-function createTextSearchTable(jdbc:Client jdbcClient) returns int|string|sql:Error??{
+function createTextSearchTable(jdbc:Client jdbcClient) returns int|string|sql:Error?{
 
    string tableName = "textSearchTypes";
 
@@ -415,7 +477,7 @@ function createTextSearchTable(jdbc:Client jdbcClient) returns int|string|sql:Er
 
 }
 
-function createUuidTable(jdbc:Client jdbcClient) returns int|string|sql:Error??{
+function createUuidTable(jdbc:Client jdbcClient) returns int|string|sql:Error?{
 
    string tableName = "uuidTypes";
 
@@ -436,7 +498,7 @@ function createUuidTable(jdbc:Client jdbcClient) returns int|string|sql:Error??{
 
 }
 
-function createXmlTable(jdbc:Client jdbcClient) returns int|string|sql:Error??{
+function createXmlTable(jdbc:Client jdbcClient) returns int|string|sql:Error?{
 
    string tableName = "xmlTypes";
 
@@ -457,7 +519,7 @@ function createXmlTable(jdbc:Client jdbcClient) returns int|string|sql:Error??{
 
 }
 
-function createJsonTable(jdbc:Client jdbcClient) returns int|string|sql:Error??{
+function createJsonTable(jdbc:Client jdbcClient) returns int|string|sql:Error?{
 
    string tableName = "jsonTypes";
 
@@ -480,7 +542,7 @@ function createJsonTable(jdbc:Client jdbcClient) returns int|string|sql:Error??{
 
 }
 
-function createArrayTable(jdbc:Client jdbcClient) returns int|string|sql:Error??{
+function createArrayTable(jdbc:Client jdbcClient) returns int|string|sql:Error?{
 
    string tableName = "arrayTypes";
 
@@ -504,16 +566,14 @@ function createArrayTable(jdbc:Client jdbcClient) returns int|string|sql:Error??
 
 }
 
-function createArrayTable(jdbc:Client jdbcClient) returns int|string|sql:Error??{
+function createCompositeTable(jdbc:Client jdbcClient) returns int|string|sql:Error?{
 
-   string tableName = "arrayTypes";
+   string tableName = "complexTypes";
 
         CreateQueries createTableQuery = createQueryMaker({
             "ID": "SERIAL", 
-            "textArrayType":"text[][]",
-            "integerArrayType":"int[]",
-            "arrayType":"int array[5]",
-            "array2Type":"int array"
+            "complexType":"complex",
+            "inventoryType":"inventory_item"
         },"ID");
 
         int|string|sql:Error? initResult = initializeTable(jdbcClient, tableName , createTableQuery.createQuery);
@@ -528,6 +588,150 @@ function createArrayTable(jdbc:Client jdbcClient) returns int|string|sql:Error??
 
 }
 
+
+function createRangeTable(jdbc:Client jdbcClient) returns int|string|sql:Error?{
+
+   string tableName = "rangeTypes";
+
+        CreateQueries createTableQuery = createQueryMaker({
+            "ID": "SERIAL", 
+            "int4rangeType":"int4range",
+            "int8rangeType":"int8range",
+            "numrangeType":"numrange",
+            "tsrangeType":"tsrange",
+            "tstzrangeType":"tstzrange",
+            "daterangeType":"daterange",
+            "floatrangeType":"floatrange"
+        },"ID");
+
+        int|string|sql:Error? initResult = initializeTable(jdbcClient, tableName , createTableQuery.createQuery);
+        if (initResult is int) {
+            io:println("Sample executed successfully!");
+        } 
+        else if (initResult is sql:Error) {
+            io:println("Customer table initialization failed: ", initResult);
+    }
+
+    return initResult;
+
+}
+
+function createDomainTable(jdbc:Client jdbcClient) returns int|string|sql:Error?{
+
+   string tableName = "domainTypes";
+
+        CreateQueries createTableQuery = createQueryMaker({
+            "ID": "SERIAL", 
+            "posintType":"posint"
+        },"ID");
+
+        int|string|sql:Error? initResult = initializeTable(jdbcClient, tableName , createTableQuery.createQuery);
+        if (initResult is int) {
+            io:println("Sample executed successfully!");
+        } 
+        else if (initResult is sql:Error) {
+            io:println("Customer table initialization failed: ", initResult);
+    }
+
+    return initResult;
+
+}
+
+function createObjectIdentifierTable(jdbc:Client jdbcClient) returns int|string|sql:Error?{
+
+   string tableName = "objectIdentifierTypes";
+
+        CreateQueries createTableQuery = createQueryMaker({
+            "ID": "SERIAL", 
+            "oidType" : "oid",
+            "regclassType" : "regclass",
+            // "regcollationType" : "regcollation",
+            "regconfigType" : "regconfig",
+            "regdictionaryType" : "regdictionary",
+            "regnamespaceType" : "regnamespace",
+            "regoperType" : "regoper",
+            "regoperatorType" : "regoperator",
+            "regprocType" : "regproc",
+            "regprocedureType" : "regprocedure",
+            "regroleType" : "regrole",
+            "regtypeType" : "regtype"
+        },"ID");
+
+        int|string|sql:Error? initResult = initializeTable(jdbcClient, tableName , createTableQuery.createQuery);
+        if (initResult is int) {
+            io:println("Sample executed successfully!");
+        } 
+        else if (initResult is sql:Error) {
+            io:println("Customer table initialization failed: ", initResult);
+    }
+
+    return initResult;
+
+}
+
+function createPglsnTable(jdbc:Client jdbcClient) returns int|string|sql:Error?{
+
+   string tableName = "pglsnTypes";
+
+        CreateQueries createTableQuery = createQueryMaker({
+            "ID": "SERIAL", 
+            "pglsnType" : "pg_lsn"
+        },"ID");
+
+        int|string|sql:Error? initResult = initializeTable(jdbcClient, tableName , createTableQuery.createQuery);
+        if (initResult is int) {
+            io:println("Sample executed successfully!");
+        } 
+        else if (initResult is sql:Error) {
+            io:println("Customer table initialization failed: ", initResult);
+    }
+
+    return initResult;
+
+}
+
+function createPseudoTypeTable(jdbc:Client jdbcClient) returns int|string|sql:Error?{
+
+   string tableName = "pseudoTypes";
+
+        CreateQueries createTableQuery = createQueryMaker({
+            "ID": "SERIAL", 
+            "anyType" : "any",
+            "anyelementType" : "anyelement",
+            "anyarrayType" : "anyarray",
+            "anynonarrayType" : "anynonarray",
+            "anyenumType" : "anyenum",
+            "anyrangeType" : "anyrange",
+            "anycompatibleType" : "anycompatible",
+            "anycompatiblearrayType" : "anycompatiblearray",
+            "anycompatiblenonarrayType" : "anycompatiblenonarray",
+            "anycompatiblerangeType" : "anycompatiblerange",
+            "cstringType" : "cstring",
+            "internalType" : "internal",
+            "language_handlerType" : "language_handler",
+            "fdw_handlerType" : "fdw_handler",
+            "table_am_handlerType" : "table_am_handler",
+            "index_am_handlerType" : "index_am_handler",
+            "tsm_handlerType" : "tsm_handler",
+            "recordType" : "record",
+            "triggerType" : "trigger",
+            "event_triggerType" : "event_trigger",
+            "pg_ddl_commandType" : "pg_ddl_command",
+            "voidType" : "void",
+            "unknownType" : "unknown"
+        },"ID");
+
+        int|string|sql:Error? initResult = initializeTable(jdbcClient, tableName , createTableQuery.createQuery);
+        if (initResult is int) {
+            io:println("Sample executed successfully!");
+        } 
+        else if (initResult is sql:Error) {
+            io:println("Customer table initialization failed: ", initResult);
+    }
+
+    return initResult;
+
+}
 
 
 
