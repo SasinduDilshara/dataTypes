@@ -20,7 +20,12 @@ function setUp(jdbc:Client jdbcClient) returns sql:Error|sql:ExecutionResult{
 
     sql:ExecutionResult|sql:Error result; 
 
-    result = jdbcClient->execute("Drop type enumValues if exists");
+    result = jdbcClient->execute("DROP TYPE IF EXISTS enumValues CASCADE;");
+
+    if(result is sql:Error){
+        io:println("Error occurred while creating the enum type..");
+        io:println(result);
+    }
     
     result = jdbcClient->execute("CREATE TYPE enumValues AS ENUM ('value1','value2','value3')");
 
@@ -135,10 +140,15 @@ function tableCreations(jdbc:Client jdbcClient) returns int|string|sql:Error??{
     result = createEnumTable(jdbcClient);
     result = createGeometricTable(jdbcClient);
     result = createNetworkTable(jdbcClient);
-    // result = createMoneyTable(jdbcClient);
-    // result = createCharacterTable(jdbcClient);
-    // result = createMoneyTable(jdbcClient);
-    // result = createCharacterTable(jdbcClient);
+    result = createBitTable(jdbcClient);
+    result = createTextSearchTable(jdbcClient);
+    result = createUuidTable(jdbcClient);
+    result = createXmlTable(jdbcClient);
+    result = createJsonTable(jdbcClient);
+    result = createArrayTable(jdbcClient);
+    // result = createTextSearchTable(jdbcClient);
+    // result = createUuidTable(jdbcClient);
+    // result = createXmlTable(jdbcClient);
 
      return result;   
 
@@ -344,6 +354,166 @@ function createNetworkTable(jdbc:Client jdbcClient) returns int|string|sql:Error
             "cidrType":"cidr",
             "macaddrType":"macaddr",
             "macaddr8Type":"macaddr8"
+        },"ID");
+
+        int|string|sql:Error? initResult = initializeTable(jdbcClient, tableName , createTableQuery.createQuery);
+        if (initResult is int) {
+            io:println("Sample executed successfully!");
+        } 
+        else if (initResult is sql:Error) {
+            io:println("Customer table initialization failed: ", initResult);
+    }
+
+    return initResult;
+
+}
+
+function createBitTable(jdbc:Client jdbcClient) returns int|string|sql:Error??{
+
+   string tableName = "bitTypes";
+
+        CreateQueries createTableQuery = createQueryMaker({
+            "ID": "SERIAL", 
+            "bitType":"bit(3)",
+            "bitVaryType":"BIT VARYING(5)",
+            "bitVaryType2":"BIT VARYING(7)",
+            "bitOnlyType":"bit"
+        },"ID");
+
+        int|string|sql:Error? initResult = initializeTable(jdbcClient, tableName , createTableQuery.createQuery);
+        if (initResult is int) {
+            io:println("Sample executed successfully!");
+        } 
+        else if (initResult is sql:Error) {
+            io:println("Customer table initialization failed: ", initResult);
+    }
+
+    return initResult;
+
+}
+
+
+function createTextSearchTable(jdbc:Client jdbcClient) returns int|string|sql:Error??{
+
+   string tableName = "textSearchTypes";
+
+        CreateQueries createTableQuery = createQueryMaker({
+            "ID": "SERIAL", 
+            "tsvectotType":"tsvector",
+            "tsqueryType":"tsquery"
+        },"ID");
+
+        int|string|sql:Error? initResult = initializeTable(jdbcClient, tableName , createTableQuery.createQuery);
+        if (initResult is int) {
+            io:println("Sample executed successfully!");
+        } 
+        else if (initResult is sql:Error) {
+            io:println("Customer table initialization failed: ", initResult);
+    }
+
+    return initResult;
+
+}
+
+function createUuidTable(jdbc:Client jdbcClient) returns int|string|sql:Error??{
+
+   string tableName = "uuidTypes";
+
+        CreateQueries createTableQuery = createQueryMaker({
+            "ID": "SERIAL", 
+            "uuidType":"uuid"
+        },"ID");
+
+        int|string|sql:Error? initResult = initializeTable(jdbcClient, tableName , createTableQuery.createQuery);
+        if (initResult is int) {
+            io:println("Sample executed successfully!");
+        } 
+        else if (initResult is sql:Error) {
+            io:println("Customer table initialization failed: ", initResult);
+    }
+
+    return initResult;
+
+}
+
+function createXmlTable(jdbc:Client jdbcClient) returns int|string|sql:Error??{
+
+   string tableName = "xmlTypes";
+
+        CreateQueries createTableQuery = createQueryMaker({
+            "ID": "SERIAL", 
+            "xmlType":"xml"
+        },"ID");
+
+        int|string|sql:Error? initResult = initializeTable(jdbcClient, tableName , createTableQuery.createQuery);
+        if (initResult is int) {
+            io:println("Sample executed successfully!");
+        } 
+        else if (initResult is sql:Error) {
+            io:println("Customer table initialization failed: ", initResult);
+    }
+
+    return initResult;
+
+}
+
+function createJsonTable(jdbc:Client jdbcClient) returns int|string|sql:Error??{
+
+   string tableName = "jsonTypes";
+
+        CreateQueries createTableQuery = createQueryMaker({
+            "ID": "SERIAL", 
+            "jsonType":"json",
+            "jsonbType":"jsonb",
+            "jsonpathType":"jsonpath"
+        },"ID");
+
+        int|string|sql:Error? initResult = initializeTable(jdbcClient, tableName , createTableQuery.createQuery);
+        if (initResult is int) {
+            io:println("Sample executed successfully!");
+        } 
+        else if (initResult is sql:Error) {
+            io:println("Customer table initialization failed: ", initResult);
+    }
+
+    return initResult;
+
+}
+
+function createArrayTable(jdbc:Client jdbcClient) returns int|string|sql:Error??{
+
+   string tableName = "arrayTypes";
+
+        CreateQueries createTableQuery = createQueryMaker({
+            "ID": "SERIAL", 
+            "textArrayType":"text[][]",
+            "integerArrayType":"int[]",
+            "arrayType":"int array[5]",
+            "array2Type":"int array"
+        },"ID");
+
+        int|string|sql:Error? initResult = initializeTable(jdbcClient, tableName , createTableQuery.createQuery);
+        if (initResult is int) {
+            io:println("Sample executed successfully!");
+        } 
+        else if (initResult is sql:Error) {
+            io:println("Customer table initialization failed: ", initResult);
+    }
+
+    return initResult;
+
+}
+
+function createArrayTable(jdbc:Client jdbcClient) returns int|string|sql:Error??{
+
+   string tableName = "arrayTypes";
+
+        CreateQueries createTableQuery = createQueryMaker({
+            "ID": "SERIAL", 
+            "textArrayType":"text[][]",
+            "integerArrayType":"int[]",
+            "arrayType":"int array[5]",
+            "array2Type":"int array"
         },"ID");
 
         int|string|sql:Error? initResult = initializeTable(jdbcClient, tableName , createTableQuery.createQuery);
