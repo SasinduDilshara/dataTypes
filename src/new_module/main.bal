@@ -166,7 +166,7 @@ function tableInsertions(jdbc:Client jdbcClient) returns sql:ExecutionResult|sql
     result = characterTableInsertions(jdbcClient);
     result = binaryTableInsertions(jdbcClient);
     result = DateTimeTableInsertions(jdbcClient);
-    // result = numericTableInsertions(jdbcClient);
+    result = booleanTimeTableInsertions(jdbcClient);
     // result = numericTableInsertions(jdbcClient);
     // result = numericTableInsertions(jdbcClient);
     // result = numericTableInsertions(jdbcClient);
@@ -434,6 +434,66 @@ function insertDateTimeTable(jdbc:Client jdbcClient , string|int timestampType, 
         
 
 }
+
+function booleanTimeTableInsertions(jdbc:Client jdbcClient) returns sql:ExecutionResult|sql:Error?{
+
+    sql:ExecutionResult|sql:Error? result;
+    result = insertBooleanTimeTable(jdbcClient,
+    
+    "true"
+
+    );
+    result = insertBooleanTimeTable(jdbcClient,
+    
+        true
+
+    );
+    result = insertBooleanTimeTable(jdbcClient,
+    
+        "yes"
+
+    );
+    result = insertBooleanTimeTable(jdbcClient,
+    
+        "on"
+
+    );
+    result = insertBooleanTimeTable(jdbcClient,
+    
+        "1"
+
+    );
+    return result;
+
+}
+
+function insertBooleanTimeTable(jdbc:Client jdbcClient ,boolean|string|int booleanType) returns sql:ExecutionResult|sql:Error?{
+    //         "booleanType":"boolean"
+   sql:ParameterizedQuery insertQuery =
+            `INSERT INTO booleantypes (
+                booleanType
+                             ) 
+             VALUES (
+                ${booleanType} :: boolean
+            )`;
+    
+
+    sql:ExecutionResult|sql:Error result = jdbcClient->execute(insertQuery);
+
+    if (result is sql:ExecutionResult) {
+        io:println("\nInsert success, generated Id: ", result.lastInsertId);
+    } 
+    else{
+        io:println("\nError ocurred while insert to numeric table\n");
+        io:println(result);
+        io:println("\n");
+    }
+    
+    return result;
+        
+
+}
+
 
 
 
