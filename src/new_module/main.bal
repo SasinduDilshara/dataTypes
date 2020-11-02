@@ -175,7 +175,7 @@ function tableInsertions(jdbc:Client jdbcClient) returns sql:ExecutionResult|sql
     result = UUIDTableInsertions(jdbcClient);
     result = xmlTableInsertions(jdbcClient);
     result = JsonTableInsertions(jdbcClient);
-    // result = numericTableInsertions(jdbcClient);
+    result = arrayTableInsertions(jdbcClient);
     // result = numericTableInsertions(jdbcClient);
 
 
@@ -868,6 +868,57 @@ function insertJsonTable(jdbc:Client jdbcClient ,string jsonType, string jsonbTy
         
 
 }
+function arrayTableInsertions(jdbc:Client jdbcClient) returns sql:ExecutionResult|sql:Error?{
+
+    sql:ExecutionResult|sql:Error? result;
+    result = insertArrayTable(jdbcClient,
+    
+
+            "{{\"A\"},{\"B\"}}", "{1,2,3,4,5}", "{1,2,3,4}","{1,2,3,4,5,6,7}"
+    );
+    result = insertArrayTable(jdbcClient,
+    
+
+            "{{\"A\"},{\"B\"}}", "{1,2,3,4,5}", "{1,2,3,4}","{1,2,3,4,5,6,7}"
+    );
+    return result;
+
+}
+
+function insertArrayTable(jdbc:Client jdbcClient ,string textArrayType , string integerArrayType, string arrayType, string array2Type) returns sql:ExecutionResult|sql:Error?{
+
+//             "textArrayType":"text[][]",
+//             "integerArrayType":"int[]",
+//             "arrayType":"int array[5]",
+//             "array2Type":"int array"
+   sql:ParameterizedQuery insertQuery =
+            `INSERT INTO arrayTypes (
+                textArrayType, integerArrayType, arrayType, array2Type
+                             ) 
+             VALUES (
+                ${textArrayType}::text[][], ${integerArrayType}::int[], ${arrayType}:: int array[5], ${array2Type}:: int array
+            )`;
+    
+
+    sql:ExecutionResult|sql:Error result = jdbcClient->execute(insertQuery);
+
+    if (result is sql:ExecutionResult) {
+        io:println("\nInsert success, generated Id: ", result.lastInsertId);
+    } 
+    else{
+        io:println("\nError ocurred while insert to numeric table\n");
+        io:println(result);
+        io:println("\n");
+    }
+    
+    return result;
+        
+
+}
+
+
+
+
 
 
 
