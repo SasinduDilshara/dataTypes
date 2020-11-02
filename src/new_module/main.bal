@@ -173,8 +173,8 @@ function tableInsertions(jdbc:Client jdbcClient) returns sql:ExecutionResult|sql
     result = BitTableInsertions(jdbcClient);
     result = textSearchTableInsertions(jdbcClient);
     result = UUIDTableInsertions(jdbcClient);
-    // result = numericTableInsertions(jdbcClient);
-    // result = numericTableInsertions(jdbcClient);
+    result = xmlTableInsertions(jdbcClient);
+    result = JsonTableInsertions(jdbcClient);
     // result = numericTableInsertions(jdbcClient);
     // result = numericTableInsertions(jdbcClient);
 
@@ -775,6 +775,105 @@ function insertUUIDTable(jdbc:Client jdbcClient ,string uuidType) returns sql:Ex
         
 
 }
+
+function xmlTableInsertions(jdbc:Client jdbcClient) returns sql:ExecutionResult|sql:Error?{
+
+    sql:ExecutionResult|sql:Error? result;
+    result = insertXmlTable(jdbcClient,
+    
+     xml `<foo><tag>bar</tag><tag>tag</tag></foo>`
+
+    );
+    result = insertXmlTable(jdbcClient,
+    
+        "<foo>bar</foo>"
+
+    );
+    return result;
+
+}
+
+function insertXmlTable(jdbc:Client jdbcClient ,string|xml xmlType) returns sql:ExecutionResult|sql:Error?{
+
+// "xmlType":"xml"
+   sql:ParameterizedQuery insertQuery =
+            `INSERT INTO xmlTypes (
+                xmlType
+                             ) 
+             VALUES (
+                ${xmlType}::xml
+            )`;
+    
+
+    sql:ExecutionResult|sql:Error result = jdbcClient->execute(insertQuery);
+
+    if (result is sql:ExecutionResult) {
+        io:println("\nInsert success, generated Id: ", result.lastInsertId);
+    } 
+    else{
+        io:println("\nError ocurred while insert to numeric table\n");
+        io:println(result);
+        io:println("\n");
+    }
+    
+    return result;
+        
+
+}
+
+function JsonTableInsertions(jdbc:Client jdbcClient) returns sql:ExecutionResult|sql:Error?{
+
+    sql:ExecutionResult|sql:Error? result;
+    result = insertJsonTable(jdbcClient,
+    
+     "{\"bar\": \"baz\", \"balance\": 7.77, \"active\":false}", "{\"bar\": \"baz\", \"balance\": 7.77, \"active\":false}","$.floor[*].apt[*] ? (@.area > 40 && @.area < 90) ? (@.rooms > 2)"
+
+    );
+    result = insertJsonTable(jdbcClient,
+    
+      "{\"bar\": \"baz\", \"balance\": 7.77, \"active\":false}", "{\"bar\": \"baz\", \"balance\": 7.77, \"active\":false}","$.floor[*].apt[*] ? (@.area > 40 && @.area < 90) ? (@.rooms > 2)"  
+
+    );
+    return result;
+
+}
+
+function insertJsonTable(jdbc:Client jdbcClient ,string jsonType, string jsonbType, string jsonPathType) returns sql:ExecutionResult|sql:Error?{
+
+// "ID": "SERIAL", 
+//             "jsonType":"json",
+//             "jsonbType":"jsonb",
+//             "jsonpathType":"jsonpath"
+   sql:ParameterizedQuery insertQuery =
+            `INSERT INTO jsonTypes (
+                jsonType, jsonbType, jsonPathType
+                             ) 
+             VALUES (
+                ${jsonType}:: json, ${jsonbType}:: jsonb, ${jsonPathType}:: jsonpath 
+            )`;
+    
+
+    sql:ExecutionResult|sql:Error result = jdbcClient->execute(insertQuery);
+
+    if (result is sql:ExecutionResult) {
+        io:println("\nInsert success, generated Id: ", result.lastInsertId);
+    } 
+    else{
+        io:println("\nError ocurred while insert to numeric table\n");
+        io:println(result);
+        io:println("\n");
+    }
+    
+    return result;
+        
+
+}
+
+
+
+
+
+
 
 
 
