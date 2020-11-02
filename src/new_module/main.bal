@@ -177,6 +177,7 @@ function tableInsertions(jdbc:Client jdbcClient) returns sql:ExecutionResult|sql
     result = JsonTableInsertions(jdbcClient);
     result = arrayTableInsertions(jdbcClient);
     result = ComplexTableInsertions(jdbcClient);
+    result = RangeTableInsertions(jdbcClient);
 
 
     return result;
@@ -943,6 +944,58 @@ function insertComplexTable(jdbc:Client jdbcClient ,string complexType, string i
                              ) 
              VALUES (
                 ${complexType}::complex, ${inventoryType}::inventory_item
+            )`;
+    
+
+    sql:ExecutionResult|sql:Error result = jdbcClient->execute(insertQuery);
+
+    if (result is sql:ExecutionResult) {
+        io:println("\nInsert success, generated Id: ", result.lastInsertId);
+    } 
+    else{
+        io:println("\nError ocurred while insert to numeric table\n");
+        io:println(result);
+        io:println("\n");
+    }
+    
+    return result;
+        
+
+}
+
+function RangeTableInsertions(jdbc:Client jdbcClient) returns sql:ExecutionResult|sql:Error?{
+
+    sql:ExecutionResult|sql:Error? result;
+    result = insertRangeTable(jdbcClient,
+    
+
+        "(2,50)","(10,100)","(0,24)","(2010-01-01 14:30, 2010-01-01 15:30)","(2010-01-01 14:30, 2010-01-01 15:30)","(2010-01-01 14:30, 2010-01-01 )","(1,4)"
+    );
+    result = insertRangeTable(jdbcClient,
+    
+
+        "(1,3)","(10,100)","(0,24)","(2010-01-01 14:30, 2010-01-01 15:30)","(2010-01-01 14:30, 2010-01-01 15:30)","(2010-01-01 14:30, 2010-01-01 )","(2,12)"
+    );
+    return result;
+
+}
+
+function insertRangeTable(jdbc:Client jdbcClient ,string int4rangeType, string int8rangeType, string numrangeType,string tsrangeType,string tstzrangeType,string daterangeType, string floatrangeType) returns sql:ExecutionResult|sql:Error?{
+
+            // "int4rangeType":"int4range",
+            // "int8rangeType":"int8range",
+            // "numrangeType":"numrange",
+            // "tsrangeType":"tsrange",
+            // "tstzrangeType":"tstzrange",
+            // "daterangeType":"daterange",
+            // "floatrangeType":"floatrange"
+   sql:ParameterizedQuery insertQuery =
+            `INSERT INTO rangeTypes (
+                int4rangeType, int8rangeType, numrangeType, tsrangeType, tstzrangeType, daterangeType, floatrangeType
+                             ) 
+             VALUES (
+                ${int4rangeType}::int4range, ${int8rangeType}::int8range, ${numrangeType}::numrange, ${tsrangeType}::tsrange, ${tstzrangeType}::tstzrange, ${daterangeType}::daterange, ${floatrangeType}::floatrange
+
             )`;
     
 
