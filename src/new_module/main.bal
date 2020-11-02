@@ -167,7 +167,7 @@ function tableInsertions(jdbc:Client jdbcClient) returns sql:ExecutionResult|sql
     result = binaryTableInsertions(jdbcClient);
     result = DateTimeTableInsertions(jdbcClient);
     result = booleanTimeTableInsertions(jdbcClient);
-in    result = enumTableInsertions(jdbcClient);
+    result = enumTableInsertions(jdbcClient);
     result = geometricTableInsertions(jdbcClient);
     result = networkTableInsertions(jdbcClient);
     result = BitTableInsertions(jdbcClient);
