@@ -171,7 +171,7 @@ function tableInsertions(jdbc:Client jdbcClient) returns sql:ExecutionResult|sql
     result = geometricTableInsertions(jdbcClient);
     result = networkTableInsertions(jdbcClient);
     result = BitTableInsertions(jdbcClient);
-    // result = numericTableInsertions(jdbcClient);
+    result = textSearchTableInsertions(jdbcClient);
     // result = numericTableInsertions(jdbcClient);
     // result = numericTableInsertions(jdbcClient);
     // result = numericTableInsertions(jdbcClient);
@@ -685,6 +685,51 @@ function insertBitTable(jdbc:Client jdbcClient ,string bitType, string bitVaryTy
 }
 
 
+function textSearchTableInsertions(jdbc:Client jdbcClient) returns sql:ExecutionResult|sql:Error?{
+
+    sql:ExecutionResult|sql:Error? result;
+    result = insertTextSearchTable(jdbcClient,
+    
+    "a fat cat sat on a mat and ate a fat rat","fat & rat"
+
+    );
+    result = insertTextSearchTable(jdbcClient,
+    
+        "a fat cat sat on a mat and ate a fat rat","fat & rat"
+
+    );
+    return result;
+
+}
+
+function insertTextSearchTable(jdbc:Client jdbcClient ,string tsvectorType, string tsqueryType) returns sql:ExecutionResult|sql:Error?{
+
+// "tsvectorType":"tsvector",
+//             "tsqueryType":"tsquery"
+   sql:ParameterizedQuery insertQuery =
+            `INSERT INTO textSearchTypes (
+                tsvectorType, tsqueryType
+                             ) 
+             VALUES (
+                ${tsvectorType}::tsvector, ${tsqueryType}::tsquery
+            )`;
+    
+
+    sql:ExecutionResult|sql:Error result = jdbcClient->execute(insertQuery);
+
+    if (result is sql:ExecutionResult) {
+        io:println("\nInsert success, generated Id: ", result.lastInsertId);
+    } 
+    else{
+        io:println("\nError ocurred while insert to numeric table\n");
+        io:println(result);
+        io:println("\n");
+    }
+    
+    return result;
+        
+
+}
 
 
 
@@ -1022,7 +1067,7 @@ function createTextSearchTable(jdbc:Client jdbcClient) returns int|string|sql:Er
 
         CreateQueries createTableQuery = createQueryMaker({
             "ID": "SERIAL", 
-            "tsvectotType":"tsvector",
+            "tsvectorType":"tsvector",
             "tsqueryType":"tsquery"
         },"ID");
 
