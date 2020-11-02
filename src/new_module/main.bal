@@ -1,6 +1,7 @@
 import ballerina/io;
 import ballerina/java.jdbc;
 import ballerina/sql;
+// import ballerina/time;
 
 public type Queries record {
     string createQuery;
@@ -161,10 +162,10 @@ function tableInsertions(jdbc:Client jdbcClient) returns sql:ExecutionResult|sql
 
 
     result = numericTableInsertions(jdbcClient);
-    // result = numericTableInsertions(jdbcClient);
-    // result = numericTableInsertions(jdbcClient);
-    // result = numericTableInsertions(jdbcClient);
-    // result = numericTableInsertions(jdbcClient);
+    result = moneyTableInsertions(jdbcClient);
+    result = characterTableInsertions(jdbcClient);
+    result = binaryTableInsertions(jdbcClient);
+    result = DateTimeTableInsertions(jdbcClient);
     // result = numericTableInsertions(jdbcClient);
     // result = numericTableInsertions(jdbcClient);
     // result = numericTableInsertions(jdbcClient);
@@ -183,6 +184,8 @@ function tableInsertions(jdbc:Client jdbcClient) returns sql:ExecutionResult|sql
 
 function numericTableInsertions(jdbc:Client jdbcClient) returns sql:ExecutionResult|sql:Error?{
 
+    //Check NAN values and Infinity values
+
     sql:ExecutionResult|sql:Error? result;
     result = insertNumericTable(jdbcClient,
     
@@ -192,7 +195,6 @@ function numericTableInsertions(jdbc:Client jdbcClient) returns sql:ExecutionRes
     result = insertNumericTable(jdbcClient,
     
         3,3,3,3,3,3,3,3,3,3
-
     );
     return result;
 
@@ -230,29 +232,27 @@ function insertNumericTable(jdbc:Client jdbcClient , string|int|float|decimal sm
 function moneyTableInsertions(jdbc:Client jdbcClient) returns sql:ExecutionResult|sql:Error?{
 
     sql:ExecutionResult|sql:Error? result;
-    result = insertNumericTable(jdbcClient,
+    result = insertMoneyTable(jdbcClient,
     
-        1,1,1,1,1,1,1,1,1,1
+    30.751
 
     );
-    result = insertNumericTable(jdbcClient,
+    result = insertMoneyTable(jdbcClient,
     
-        3,3,3,3,3,3,3,3,3,3
+        "1076567.5"
 
     );
     return result;
 
 }
 
-function insertMoneyTable(jdbc:Client jdbcClient , string|int|float|decimal smallIntType,) returns sql:ExecutionResult|sql:Error?{
+function insertMoneyTable(jdbc:Client jdbcClient , string|int|float|decimal moneyType) returns sql:ExecutionResult|sql:Error?{
     // "MoneyType":"money"
    sql:ParameterizedQuery insertQuery =
-            `INSERT INTO numericTypes (
-                smallIntType, intType, bigIntType, decimalType, numericType, realType, doublePrecisionType, smallSerialType, serialType, bigSerialType
-                ) 
+            `INSERT INTO moneyTypes (
+                moneyType              ) 
              VALUES (
-            ${smallIntType}, ${intType}, ${bigInttypeypeType}, ${decimalType}, ${numericType}, ${realType}, ${doublePrecisionType}, ${smallSerialType}, ${serialType}, ${bigSerialType}
-            
+                ${moneyType} ::float8::numeric::money 
             )`;
     
 
@@ -271,6 +271,171 @@ function insertMoneyTable(jdbc:Client jdbcClient , string|int|float|decimal smal
         
 
 }
+
+
+
+function characterTableInsertions(jdbc:Client jdbcClient) returns sql:ExecutionResult|sql:Error?{
+
+    sql:ExecutionResult|sql:Error? result;
+    result = insertCharacterTable(jdbcClient,
+    
+    "A","B","C","D","E"
+
+    );
+    result = insertCharacterTable(jdbcClient,
+    
+        "1","2","3","4","5"
+
+    );
+    return result;
+
+}
+
+function insertCharacterTable(jdbc:Client jdbcClient , string charType, string varcharType, string textType, string nameType, string charWithoutLengthType) returns sql:ExecutionResult|sql:Error?{
+    //         "charType":"char(10)",
+    //         "varcharType":"varchar(10)",
+    //         "textType":"text",
+    //         "nameType":"name",
+    //         "charWithoutLengthType": "char"
+   sql:ParameterizedQuery insertQuery =
+            `INSERT INTO charTypes (
+                charType, varcharType, textType, nameType, charWithoutLengthType              ) 
+             VALUES (
+                ${charType}, ${varcharType}, ${textType}, ${nameType}, ${charWithoutLengthType}
+            )`;
+    
+
+    sql:ExecutionResult|sql:Error result = jdbcClient->execute(insertQuery);
+
+    if (result is sql:ExecutionResult) {
+        io:println("\nInsert success, generated Id: ", result.lastInsertId);
+    } 
+    else{
+        io:println("\nError ocurred while insert to numeric table\n");
+        io:println(result);
+        io:println("\n");
+    }
+    
+    return result;
+        
+
+}
+
+
+
+function binaryTableInsertions(jdbc:Client jdbcClient) returns sql:ExecutionResult|sql:Error?{
+
+    sql:ExecutionResult|sql:Error? result;
+    byte[] byteArray1 = [5, 24, 56, 243];
+
+    byte[] byteArray2 = base16 `aeeecdefabcd12345567888822`;
+
+    byte[] byteArray3 = base64 `aGVsbG8gYmFsbGVyaW5hICEhIQ==`;
+
+    result = insertBinaryTable(jdbcClient,
+    
+    "\\xDEADBEEF"
+
+    );
+    result = insertBinaryTable(jdbcClient,
+    
+        "abc \\153\\154\\155 \\052\\251\\124"
+
+    );
+    result = insertBinaryTable(jdbcClient,
+    
+        byteArray1
+
+    );
+    result = insertBinaryTable(jdbcClient,
+    
+        byteArray2
+
+    );
+    result = insertBinaryTable(jdbcClient,
+    
+        byteArray3
+
+    );
+    return result;
+
+}
+
+function insertBinaryTable(jdbc:Client jdbcClient , string|byte[] byteaType) returns sql:ExecutionResult|sql:Error?{
+    // "byteaType":"bytea" 
+   sql:ParameterizedQuery insertQuery =
+            `INSERT INTO binaryTypes (
+                byteaType
+                            ) 
+             VALUES (
+                ${byteaType} :: bytea
+            )`;
+    
+
+    sql:ExecutionResult|sql:Error result = jdbcClient->execute(insertQuery);
+
+    if (result is sql:ExecutionResult) {
+        io:println("\nInsert success, generated Id: ", result.lastInsertId);
+    } 
+    else{
+        io:println("\nError ocurred while insert to numeric table\n");
+        io:println(result);
+        io:println("\n");
+    }
+    
+    return result;
+        
+
+}
+
+function DateTimeTableInsertions(jdbc:Client jdbcClient) returns sql:ExecutionResult|sql:Error?{
+
+    sql:ExecutionResult|sql:Error? result;
+    result = insertDateTimeTable(jdbcClient,
+    
+    "2004-10-19 10:23:54","January 8, 1999","04:05:06.789","4 Year"
+
+    );
+    result = insertDateTimeTable(jdbcClient,
+    
+        "2004-10-19 10:23:54+02","January 8, 1999","2003-04-12 04:05:06 America/New_York","4 Month"
+
+    );
+    return result;
+
+}
+
+function insertDateTimeTable(jdbc:Client jdbcClient , string|int timestampType, string|int dateType, string|int timeType, string|int intervalType) returns sql:ExecutionResult|sql:Error?{
+    //         "timestampType":"timestamp",
+    //         "dateType":"date",
+    //         "timeType":"time",
+    //         "intervalType":"interval"
+   sql:ParameterizedQuery insertQuery =
+            `INSERT INTO dateTimeTypes (
+                timestampType, dateType, timeType, intervalType
+                             ) 
+             VALUES (
+                ${timestampType}:: timestamp, ${dateType}::Date, ${timeType}::time, ${intervalType} :: interval
+            )`;
+    
+
+    sql:ExecutionResult|sql:Error result = jdbcClient->execute(insertQuery);
+
+    if (result is sql:ExecutionResult) {
+        io:println("\nInsert success, generated Id: ", result.lastInsertId);
+    } 
+    else{
+        io:println("\nError ocurred while insert to numeric table\n");
+        io:println(result);
+        io:println("\n");
+    }
+    
+    return result;
+        
+
+}
+
+
 
 
 
@@ -468,6 +633,7 @@ function createDateTimeTable(jdbc:Client jdbcClient) returns int|string|sql:Erro
             "timestampType":"timestamp",
             "dateType":"date",
             "timeType":"time",
+            // "timeWithTimeZoneType":"timestamp with time zone",
             "intervalType":"interval"
         },"ID");
 

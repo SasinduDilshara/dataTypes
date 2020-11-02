@@ -1,0 +1,6 @@
+1. For chracter table text type io:ReadableCharacterChannel|string 
+        textType.... Error
+
+2. Ballerina:Time:time give error while it pass to a datetime function        
+
+3. Time with timezone give an error.
