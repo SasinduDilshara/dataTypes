@@ -172,7 +172,7 @@ function tableInsertions(jdbc:Client jdbcClient) returns sql:ExecutionResult|sql
     result = networkTableInsertions(jdbcClient);
     result = BitTableInsertions(jdbcClient);
     result = textSearchTableInsertions(jdbcClient);
-    // result = numericTableInsertions(jdbcClient);
+    result = UUIDTableInsertions(jdbcClient);
     // result = numericTableInsertions(jdbcClient);
     // result = numericTableInsertions(jdbcClient);
     // result = numericTableInsertions(jdbcClient);
@@ -730,6 +730,52 @@ function insertTextSearchTable(jdbc:Client jdbcClient ,string tsvectorType, stri
         
 
 }
+
+function UUIDTableInsertions(jdbc:Client jdbcClient) returns sql:ExecutionResult|sql:Error?{
+
+    sql:ExecutionResult|sql:Error? result;
+    result = insertUUIDTable(jdbcClient,
+    
+    "A0EEBC99-9C0B-4EF8-BB6D-6BB9BD380A11"
+
+    );
+    result = insertUUIDTable(jdbcClient,
+    
+        "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11"
+
+    );
+    return result;
+
+}
+
+function insertUUIDTable(jdbc:Client jdbcClient ,string uuidType) returns sql:ExecutionResult|sql:Error?{
+
+// "uuidType":"uuid"
+   sql:ParameterizedQuery insertQuery =
+            `INSERT INTO uuidTypes (
+                uuidType
+                             ) 
+             VALUES (
+                ${uuidType}::uuid
+            )`;
+    
+
+    sql:ExecutionResult|sql:Error result = jdbcClient->execute(insertQuery);
+
+    if (result is sql:ExecutionResult) {
+        io:println("\nInsert success, generated Id: ", result.lastInsertId);
+    } 
+    else{
+        io:println("\nError ocurred while insert to numeric table\n");
+        io:println(result);
+        io:println("\n");
+    }
+    
+    return result;
+        
+
+}
+
 
 
 
