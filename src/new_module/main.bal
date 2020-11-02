@@ -167,10 +167,10 @@ function tableInsertions(jdbc:Client jdbcClient) returns sql:ExecutionResult|sql
     result = binaryTableInsertions(jdbcClient);
     result = DateTimeTableInsertions(jdbcClient);
     result = booleanTimeTableInsertions(jdbcClient);
-    result = enumTimeTableInsertions(jdbcClient);
-    // result = numericTableInsertions(jdbcClient);
-    // result = numericTableInsertions(jdbcClient);
-    // result = numericTableInsertions(jdbcClient);
+in    result = enumTableInsertions(jdbcClient);
+    result = geometricTableInsertions(jdbcClient);
+    result = networkTableInsertions(jdbcClient);
+    result = BitTableInsertions(jdbcClient);
     // result = numericTableInsertions(jdbcClient);
     // result = numericTableInsertions(jdbcClient);
     // result = numericTableInsertions(jdbcClient);
@@ -495,15 +495,15 @@ function insertBooleanTimeTable(jdbc:Client jdbcClient ,boolean|string|int boole
 }
 
 
-function enumTimeTableInsertions(jdbc:Client jdbcClient) returns sql:ExecutionResult|sql:Error?{
+function enumTableInsertions(jdbc:Client jdbcClient) returns sql:ExecutionResult|sql:Error?{
 
     sql:ExecutionResult|sql:Error? result;
-    result = insertEnumTimeTable(jdbcClient,
+    result = insertEnumTable(jdbcClient,
     
     "value1"
 
     );
-    result = insertEnumTimeTable(jdbcClient,
+    result = insertEnumTable(jdbcClient,
     
         "value2"
 
@@ -512,7 +512,7 @@ function enumTimeTableInsertions(jdbc:Client jdbcClient) returns sql:ExecutionRe
 
 }
 
-function insertEnumTimeTable(jdbc:Client jdbcClient ,string|int|boolean|float|decimal|byte[]|xml enumType) returns sql:ExecutionResult|sql:Error?{
+function insertEnumTable(jdbc:Client jdbcClient ,string|int|boolean|float|decimal|byte[]|xml enumType) returns sql:ExecutionResult|sql:Error?{
 // "enumType":"enumValues"
    sql:ParameterizedQuery insertQuery =
             `INSERT INTO enumTypes (
@@ -539,6 +539,150 @@ function insertEnumTimeTable(jdbc:Client jdbcClient ,string|int|boolean|float|de
 
 }
 
+function geometricTableInsertions(jdbc:Client jdbcClient) returns sql:ExecutionResult|sql:Error?{
+
+    sql:ExecutionResult|sql:Error? result;
+    result = insertGeometricTable(jdbcClient,
+    
+    "(1,2)", "{1,2,3}","[(1,2),(3,4)]","((1,2),(3,4))","((1,2),(3,4))","((1,2),(3,4))","((1,2),3)"
+
+    );
+    result = insertGeometricTable(jdbcClient,
+    
+    "(1,2)", "{1,2,3}","[(1,2),(3,4)]","((1,2),(3,4))","((1,2),(3,4))","((1,2),(3,4))","((1,2),3)"
+
+    );
+    
+    return result;
+
+}
+
+function insertGeometricTable(jdbc:Client jdbcClient ,string pointType, string lineType, string lsegType, string boxType, string pathType, string polygonType, string circleType) returns sql:ExecutionResult|sql:Error?{
+// "pointType":"point",
+//             "lineType":"line",
+//             "lsegType":"lseg",
+//             "boxType":"box",
+//             "pathType":"path",
+//             "polygonType":"polygon",
+//             "circleType":"circle"
+   sql:ParameterizedQuery insertQuery =
+            `INSERT INTO geometrictypes (
+                pointType, lineType, lsegType, boxType, pathType, polygonType, circleType
+                             ) 
+             VALUES (
+                ${pointType}::point, ${lineType}::line, ${lsegType}::lseg, ${boxType}::box, ${pathType}::path, ${polygonType}::polygon, ${circleType}::circle
+            )`;
+    
+
+    sql:ExecutionResult|sql:Error result = jdbcClient->execute(insertQuery);
+
+    if (result is sql:ExecutionResult) {
+        io:println("\nInsert success, generated Id: ", result.lastInsertId);
+    } 
+    else{
+        io:println("\nError ocurred while insert to numeric table\n");
+        io:println(result);
+        io:println("\n");
+    }
+    
+    return result;
+        
+
+}
+
+function networkTableInsertions(jdbc:Client jdbcClient) returns sql:ExecutionResult|sql:Error?{
+
+    sql:ExecutionResult|sql:Error? result;
+    result = insertNetworkTable(jdbcClient,
+    
+    "192.168.0.1/24","::ffff:1.2.3.0/120","08:00:2b:01:02:03","08-00-2b-01-02-03-04-05"
+
+    );
+    result = insertNetworkTable(jdbcClient,
+    
+        "192.168.0.1/24","::ffff:1.2.3.0/120","08:00:2b:01:02:03","08-00-2b-01-02-03-04-05"
+
+    );
+    return result;
+
+}
+
+function insertNetworkTable(jdbc:Client jdbcClient ,string inetType, string cidrType, string macaddrType, string macaddr8Type) returns sql:ExecutionResult|sql:Error?{
+// "inetType":"inet",
+//             "cidrType":"cidr",
+//             "macaddrType":"macaddr",
+//             "macaddr8Type":"macaddr8"
+   sql:ParameterizedQuery insertQuery =
+            `INSERT INTO networkTypes (
+                inetType, cidrType, macaddrType, macaddr8Type
+                             ) 
+             VALUES (
+                ${inetType}::inet, ${cidrType}::cidr, ${macaddrType}::macaddr, ${macaddr8Type}::macaddr8
+            )`;
+    
+
+    sql:ExecutionResult|sql:Error result = jdbcClient->execute(insertQuery);
+
+    if (result is sql:ExecutionResult) {
+        io:println("\nInsert success, generated Id: ", result.lastInsertId);
+    } 
+    else{
+        io:println("\nError ocurred while insert to numeric table\n");
+        io:println(result);
+        io:println("\n");
+    }
+    
+    return result;
+        
+
+}
+function BitTableInsertions(jdbc:Client jdbcClient) returns sql:ExecutionResult|sql:Error?{
+
+    sql:ExecutionResult|sql:Error? result;
+    result = insertBitTable(jdbcClient,
+    
+    "101","B101","B101","B101"
+
+    );
+    result = insertBitTable(jdbcClient,
+    
+        "001","B101","B101","B101"
+
+    );
+    return result;
+
+}
+
+function insertBitTable(jdbc:Client jdbcClient ,string bitType, string bitVaryType, string bitVaryType2, string bitOnlyType) returns sql:ExecutionResult|sql:Error?{
+
+// "bitType":"bit(3)",
+//             "bitVaryType":"BIT VARYING(5)",
+//             "bitVaryType2":"BIT VARYING(7)",
+//             "bitOnlyType":"bit"
+   sql:ParameterizedQuery insertQuery =
+            `INSERT INTO bitTypes (
+                bitType, bitVaryType, bitVaryType2, bitOnlyType
+                             ) 
+             VALUES (
+                ${bitType}::bit(3), ${bitVaryType}::BIT VARYING(5), ${bitVaryType2}::BIT VARYING(7), ${bitOnlyType}::bit
+            )`;
+    
+
+    sql:ExecutionResult|sql:Error result = jdbcClient->execute(insertQuery);
+
+    if (result is sql:ExecutionResult) {
+        io:println("\nInsert success, generated Id: ", result.lastInsertId);
+    } 
+    else{
+        io:println("\nError ocurred while insert to numeric table\n");
+        io:println(result);
+        io:println("\n");
+    }
+    
+    return result;
+        
+
+}
 
 
 
