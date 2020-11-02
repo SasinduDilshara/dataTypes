@@ -178,6 +178,9 @@ function tableInsertions(jdbc:Client jdbcClient) returns sql:ExecutionResult|sql
     result = arrayTableInsertions(jdbcClient);
     result = ComplexTableInsertions(jdbcClient);
     result = RangeTableInsertions(jdbcClient);
+    result = domainTableInsertions(jdbcClient);
+    result = objectIdentifierTableInsertions(jdbcClient);
+    result = pslgnTableInsertions(jdbcClient);
 
 
     return result;
@@ -1016,6 +1019,154 @@ function insertRangeTable(jdbc:Client jdbcClient ,string int4rangeType, string i
 }
 
 
+function domainTableInsertions(jdbc:Client jdbcClient) returns sql:ExecutionResult|sql:Error?{
+
+    sql:ExecutionResult|sql:Error? result;
+    result = insertDomainTable(jdbcClient,
+    
+        1
+
+    );
+    result = insertDomainTable(jdbcClient,
+    
+        "1"
+
+    );
+    return result;
+
+}
+
+function insertDomainTable(jdbc:Client jdbcClient ,string|int posintType) returns sql:ExecutionResult|sql:Error?{
+
+            // "posintType":"posint"
+   sql:ParameterizedQuery insertQuery =
+            `INSERT INTO domainTypes (
+                posintType
+                             ) 
+             VALUES (
+                ${posintType}::posint
+            )`;
+    
+
+    sql:ExecutionResult|sql:Error result = jdbcClient->execute(insertQuery);
+
+    if (result is sql:ExecutionResult) {
+        io:println("\nInsert success, generated Id: ", result.lastInsertId);
+    } 
+    else{
+        io:println("\nError ocurred while insert to numeric table\n");
+        io:println(result);
+        io:println("\n");
+    }
+    
+    return result;
+        
+
+}
+
+
+
+function objectIdentifierTableInsertions(jdbc:Client jdbcClient) returns sql:ExecutionResult|sql:Error?{
+
+    sql:ExecutionResult|sql:Error? result;
+    result = insertObjectIdentifierTable(jdbcClient,
+    
+        "564182","pg_type","english","simple","pg_catalog","!","*(int,int)","NOW","sum(int4)","postgres","int"
+
+    );
+    // result = insertObjectIdentifierTable(jdbcClient,
+    
+    //     "564182","pg_type","english","simple","pg_catalog","*","*(integer,​integer) or -(NONE,​integer)","sum","sum(int4)","smithee","integer"
+
+    // );
+    return result;
+
+}
+
+function insertObjectIdentifierTable(jdbc:Client jdbcClient ,string oidType, string regclassType, string regconfigType, string regdictionaryType, string regnamespaceType, string regoperType, string regoperatorType, string regprocType, string regprocedureType, string regroleType, string regtypeType ) returns sql:ExecutionResult|sql:Error?{
+
+    //         "oidType" : "oid",
+    //         "regclassType" : "regclass",
+    //         "regconfigType" : "regconfig",
+    //         "regdictionaryType" : "regdictionary",
+    //         "regnamespaceType" : "regnamespace",
+    //         "regoperType" : "regoper",
+    //         "regoperatorType" : "regoperator",
+    //         "regprocType" : "regproc",
+    //         "regprocedureType" : "regprocedure",
+    //         "regroleType" : "regrole",
+    //         "regtypeType" : "regtype"
+   sql:ParameterizedQuery insertQuery =
+            `INSERT INTO objectIdentifierTypes (
+                oidType, regclassType, regconfigType, regdictionaryType, regnamespaceType, regoperType, regoperatorType, regprocType, regprocedureType, regroleType, regtypeType
+                             ) 
+             VALUES (
+                ${oidType} ::oid, ${regclassType} ::regclass, ${regconfigType} ::regconfig, ${regdictionaryType} ::regdictionary, ${regnamespaceType} ::regnamespace, ${regoperType} ::regoper, ${regoperatorType} ::regoperator, ${regprocType} ::regproc, ${regprocedureType} ::regprocedure, ${regroleType} ::regrole, ${regtypeType} ::regtype
+            )`;
+    
+
+    sql:ExecutionResult|sql:Error result = jdbcClient->execute(insertQuery);
+
+    if (result is sql:ExecutionResult) {
+        io:println("\nInsert success, generated Id: ", result.lastInsertId);
+    } 
+    else{
+        io:println("\nError ocurred while insert to numeric table\n");
+        io:println(result);
+        io:println("\n");
+    }
+    
+    return result;
+        
+
+}
+
+
+
+function pslgnTableInsertions(jdbc:Client jdbcClient) returns sql:ExecutionResult|sql:Error?{
+
+    sql:ExecutionResult|sql:Error? result;
+    result = insertPslgnTable(jdbcClient,
+    
+        "16/B374D848"
+
+    );
+    result = insertPslgnTable(jdbcClient,
+    
+        "16/B374D848"
+
+    );
+    return result;
+
+}
+
+function insertPslgnTable(jdbc:Client jdbcClient ,string pglsnType) returns sql:ExecutionResult|sql:Error?{
+
+            // "pglsnType" : "pg_lsn"
+   sql:ParameterizedQuery insertQuery =
+            `INSERT INTO pglsnTypes (
+                pglsnType
+                             ) 
+             VALUES (
+                ${pglsnType}::pg_lsn
+            )`;
+    
+
+    sql:ExecutionResult|sql:Error result = jdbcClient->execute(insertQuery);
+
+    if (result is sql:ExecutionResult) {
+        io:println("\nInsert success, generated Id: ", result.lastInsertId);
+    } 
+    else{
+        io:println("\nError ocurred while insert to numeric table\n");
+        io:println(result);
+        io:println("\n");
+    }
+    
+    return result;
+        
+
+}
 
 
 
