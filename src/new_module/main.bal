@@ -167,7 +167,7 @@ function tableInsertions(jdbc:Client jdbcClient) returns sql:ExecutionResult|sql
     result = binaryTableInsertions(jdbcClient);
     result = DateTimeTableInsertions(jdbcClient);
     result = booleanTimeTableInsertions(jdbcClient);
-    // result = numericTableInsertions(jdbcClient);
+    result = enumTimeTableInsertions(jdbcClient);
     // result = numericTableInsertions(jdbcClient);
     // result = numericTableInsertions(jdbcClient);
     // result = numericTableInsertions(jdbcClient);
@@ -494,6 +494,50 @@ function insertBooleanTimeTable(jdbc:Client jdbcClient ,boolean|string|int boole
 
 }
 
+
+function enumTimeTableInsertions(jdbc:Client jdbcClient) returns sql:ExecutionResult|sql:Error?{
+
+    sql:ExecutionResult|sql:Error? result;
+    result = insertEnumTimeTable(jdbcClient,
+    
+    "value1"
+
+    );
+    result = insertEnumTimeTable(jdbcClient,
+    
+        "value2"
+
+    );
+    return result;
+
+}
+
+function insertEnumTimeTable(jdbc:Client jdbcClient ,string|int|boolean|float|decimal|byte[]|xml enumType) returns sql:ExecutionResult|sql:Error?{
+// "enumType":"enumValues"
+   sql:ParameterizedQuery insertQuery =
+            `INSERT INTO enumTypes (
+                enumType
+                             ) 
+             VALUES (
+                ${enumType}::enumvalues
+            )`;
+    
+
+    sql:ExecutionResult|sql:Error result = jdbcClient->execute(insertQuery);
+
+    if (result is sql:ExecutionResult) {
+        io:println("\nInsert success, generated Id: ", result.lastInsertId);
+    } 
+    else{
+        io:println("\nError ocurred while insert to numeric table\n");
+        io:println(result);
+        io:println("\n");
+    }
+    
+    return result;
+        
+
+}
 
 
 
