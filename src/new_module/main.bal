@@ -260,7 +260,7 @@ function selecionQueryMaker(string tableName , string columns = "*",string condi
 //'''''''''''''''
 public type characterRecord record{
 
-    string ID;
+    int ID;
     string charType;
     string varcharType;
     string textType;
@@ -281,22 +281,24 @@ function characterTableSelection(jdbc:Client jdbcClient, string columns = "*",st
         stream<record{}, error> resultStream =
         jdbcClient->query(selectionQuery, characterRecord);
 
-    io:println(resultStream);
+    // io:println(resultStream);
 
     stream<characterRecord, sql:Error> customerStream =
         <stream<characterRecord, sql:Error>>resultStream;
 
-        io:println(customerStream);
-
+        // io:println(customerStream);
+    
     error? e = customerStream.forEach(function(characterRecord rec) {
+        io:println("\n");
         io:println(rec);
         io:println(rec.charType);
         io:println(rec.varcharType);
         io:println(rec.textType);
         io:println(rec.nameType);
         io:println(rec.charWithoutLengthType);
-        
+        io:println("\n");
     });
+    
     if (e is error) {
         io:println(e);
     }
@@ -529,7 +531,8 @@ function characterTableInsertions(jdbc:Client jdbcClient) returns sql:ExecutionR
     sql:ExecutionResult|sql:Error? result;
     result = insertCharacterTable(jdbcClient,
     
-    "A","B","C","D","E"
+    "1234567890","1234567890","function characterTableInsertions(jdbc:Client jdbcClient) returns sql:ExecutionResult|sql:Error?",
+    "12345678123456781234567812345678123456781234567812345678123456789","1"
 
     );
     result = insertCharacterTable(jdbcClient,
