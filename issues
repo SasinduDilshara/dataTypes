@@ -15,4 +15,6 @@
 
 6. Whe we give money values as normal ecimals it works. but edge cases work for sytring only
 
-7. Text value cannot get as a a io:readableBytechannel??
+7. Text,Binary value cannot get as a a io:readableBytechannel??  (But build it in sql)
+
+8. Time interval cannot cast to int. only or string 

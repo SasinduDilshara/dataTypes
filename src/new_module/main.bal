@@ -137,14 +137,15 @@ function tableCreations(jdbc:Client jdbcClient) returns int|string|sql:Error?{
 
     // result = createNumericTable(jdbcClient);
     // result = createMoneyTable(jdbcClient);
-    result = createCharacterTable(jdbcClient);
+    // result = createCharacterTable(jdbcClient);
     // result = createBinaryTable(jdbcClient);
     // result = createDateTimeTable(jdbcClient);
     // result = createBooleanTable(jdbcClient);
     // result = createEnumTable(jdbcClient);
     // result = createGeometricTable(jdbcClient);
     // result = createNetworkTable(jdbcClient);
-    // result = createBitTable(jdbcClient);
+    result = createBitTable(jdbcClient);
+
     // result = createTextSearchTable(jdbcClient);
     // result = createUuidTable(jdbcClient);
     // result = createXmlTable(jdbcClient);
@@ -169,14 +170,15 @@ function tableInsertions(jdbc:Client jdbcClient) returns sql:ExecutionResult|sql
 
     // result = numericTableInsertions(jdbcClient);
     // result = moneyTableInsertions(jdbcClient);
-    result = characterTableInsertions(jdbcClient);
+    // result = characterTableInsertions(jdbcClient);
     // result = binaryTableInsertions(jdbcClient);
     // result = DateTimeTableInsertions(jdbcClient);
     // result = booleanTimeTableInsertions(jdbcClient);
     // result = enumTableInsertions(jdbcClient);
     // result = geometricTableInsertions(jdbcClient);
     // result = networkTableInsertions(jdbcClient);
-    // result = BitTableInsertions(jdbcClient);
+    result = BitTableInsertions(jdbcClient);
+
     // result = textSearchTableInsertions(jdbcClient);
     // result = UUIDTableInsertions(jdbcClient);
     // result = xmlTableInsertions(jdbcClient);
@@ -229,14 +231,15 @@ function tableSelections(jdbc:Client jdbcClient) returns sql:Error?{
 
         // result = numericTableSelection(jdbcClient);
         // result = moneyTableSelection(jdbcClient);
-        result = characterTableSelection(jdbcClient);
-        // result = moneyTableSelection(jdbcClient);
-        // result = moneyTableSelection(jdbcClient);
-        // result = moneyTableSelection(jdbcClient);
-        // result = moneyTableSelection(jdbcClient);
-        // result = moneyTableSelection(jdbcClient);
-        // result = moneyTableSelection(jdbcClient);
-        // result = moneyTableSelection(jdbcClient);
+        // result = characterTableSelection(jdbcClient);
+        // result = binaryTableSelection(jdbcClient);
+        // result = dateTimeTableSelection(jdbcClient);
+        // result = BooleanTableSelection(jdbcClient);
+        // result = enumTableSelection(jdbcClient);
+        // result = geometricTableSelection(jdbcClient);
+        // result = networkTableSelection(jdbcClient);
+        result = bitTableSelection(jdbcClient);
+
         // result = moneyTableSelection(jdbcClient);
         // result = moneyTableSelection(jdbcClient);
         // result = moneyTableSelection(jdbcClient);
@@ -256,6 +259,373 @@ function selecionQueryMaker(string tableName , string columns = "*",string condi
     return "Select " + columns + " from "+ tableName + " where " + condition;
 
 }
+//........................................................................................................
+
+
+
+
+public type BitRecord record{
+    
+    int ID;
+    string bitType;
+    float bitVaryType;
+    float bitVaryType2;
+    int bitOnlyType;
+};
+
+
+function bitTableSelection(jdbc:Client jdbcClient, string columns = "*",string condition = "True") returns sql:Error?{
+//             "bitType":"bit(3)",
+//             "bitVaryType":"BIT VARYING(5)",
+//             "bitVaryType2":"BIT VARYING(7)",
+//             "bitOnlyType":"bit"
+     io:println("------ Start Query in Bit table-------");
+
+    // string selectionQuery = selecionQueryMaker("bitTypes",columns,condition);
+
+    string selectionQuery = "select ID,bitType::int,bitVaryType,bitVaryType2,bitOnlyType from bitTypes"; 
+
+        stream<record{}, error> resultStream =
+        jdbcClient->query(selectionQuery, BitRecord);
+
+
+    stream<BitRecord, sql:Error> customerStream =
+        <stream<BitRecord, sql:Error>>resultStream;
+    
+    error? e = customerStream.forEach(function(BitRecord rec) {
+        io:println("\n");
+        io:println(rec);
+        // io:println(rec.bitType);
+        io:println(rec.bitVaryType);
+        io:println(rec.bitVaryType2);
+        io:println(rec.bitOnlyType);
+        io:println("\n");
+    });
+    
+    if (e is error) {
+        io:println(e);
+    }
+
+    io:println("------ End Query in Bit table-------");
+
+
+}
+
+
+
+
+
+
+//.......................................................................................................
+
+
+public type NetworkRecord record{
+    
+    int ID;
+    string inetType;
+    string cidrType;
+    string macaddrType;
+    string macaddr8Type;
+};
+
+
+function networkTableSelection(jdbc:Client jdbcClient, string columns = "*",string condition = "True") returns sql:Error?{
+//             "inetType":"inet",
+//             "cidrType":"cidr",
+//             "macaddrType":"macaddr",
+//             "macaddr8Type":"macaddr8"
+     io:println("------ Start Query in Network table-------");
+
+    string selectionQuery = selecionQueryMaker("networkTypes",columns,condition);
+
+        stream<record{}, error> resultStream =
+        jdbcClient->query(selectionQuery, NetworkRecord);
+
+
+    stream<NetworkRecord, sql:Error> customerStream =
+        <stream<NetworkRecord, sql:Error>>resultStream;
+    
+    error? e = customerStream.forEach(function(NetworkRecord rec) {
+        io:println("\n");
+        io:println(rec);
+        io:println(rec.inetType);
+        io:println(rec.cidrType);
+        io:println(rec.macaddrType);
+        io:println(rec.macaddr8Type);
+        io:println("\n");
+    });
+    
+    if (e is error) {
+        io:println(e);
+    }
+
+    io:println("------ End Query in Network table-------");
+
+
+}
+
+//.......................................................................................................
+
+
+
+
+public type GeometricRecord record{
+    
+    int ID;
+    string pointType;
+    string lineType;
+    string lsegType;
+    string boxType;
+    string pathType;
+    string polygonType;
+    string circleType;
+
+};
+
+
+function geometricTableSelection(jdbc:Client jdbcClient, string columns = "*",string condition = "True") returns sql:Error?{
+// "pointType":"point",
+//             "lineType":"line",
+//             "lsegType":"lseg",
+//             "boxType":"box",
+//             "pathType":"path",
+//             "polygonType":"polygon",
+//             "circleType":"circle"
+     io:println("------ Start Query in Geometric table-------");
+
+    string selectionQuery = selecionQueryMaker("geometricTypes",columns,condition);
+
+        stream<record{}, error> resultStream =
+        jdbcClient->query(selectionQuery, GeometricRecord);
+
+
+    stream<GeometricRecord, sql:Error> customerStream =
+        <stream<GeometricRecord, sql:Error>>resultStream;
+    
+    error? e = customerStream.forEach(function(GeometricRecord rec) {
+        io:println("\n");
+        io:println(rec);
+        io:println(rec.pointType);
+        io:println(rec.lineType);
+        io:println(rec.lsegType);
+        io:println(rec.boxType);
+        io:println(rec.pathType);
+        io:println(rec.polygonType);
+        io:println(rec.circleType);
+        io:println("\n");
+    });
+    
+    if (e is error) {
+        io:println(e);
+    }
+
+    io:println("------ End Query in Geometric table-------");
+
+
+}
+
+
+
+
+
+
+
+//........................................................................................................
+
+
+
+public type EnumRecord record{
+    
+    int ID;
+    string enumType;
+
+};
+
+
+function enumTableSelection(jdbc:Client jdbcClient, string columns = "*",string condition = "True") returns sql:Error?{
+// "enumType":"enumValues"
+     io:println("------ Start Query in Enum table-------");
+
+    string selectionQuery = selecionQueryMaker("enumTypes",columns,condition);
+
+        stream<record{}, error> resultStream =
+        jdbcClient->query(selectionQuery, EnumRecord);
+
+
+    stream<EnumRecord, sql:Error> customerStream =
+        <stream<EnumRecord, sql:Error>>resultStream;
+    
+    error? e = customerStream.forEach(function(EnumRecord rec) {
+        io:println("\n");
+        io:println(rec);
+        io:println(rec.enumType);
+        io:println("\n");
+    });
+    
+    if (e is error) {
+        io:println(e);
+    }
+
+    io:println("------ End Query in Enum table-------");
+
+
+}
+
+
+
+//........................................................................................................
+
+
+
+public type BooleanRecord record{
+    
+    int ID;
+    boolean booleanType;
+
+};
+
+
+function BooleanTableSelection(jdbc:Client jdbcClient, string columns = "*",string condition = "True") returns sql:Error?{
+    //         "booleanType":"boolean"
+     io:println("------ Start Query in Boolean table-------");
+
+    string selectionQuery = selecionQueryMaker("booleanTypes",columns,condition);
+
+        stream<record{}, error> resultStream =
+        jdbcClient->query(selectionQuery, BooleanRecord);
+
+
+    stream<BooleanRecord, sql:Error> customerStream =
+        <stream<BooleanRecord, sql:Error>>resultStream;
+    
+    error? e = customerStream.forEach(function(BooleanRecord rec) {
+        io:println("\n");
+        io:println(rec);
+        io:println(rec.booleanType);
+        io:println("\n");
+    });
+    
+    if (e is error) {
+        io:println(e);
+    }
+
+    io:println("------ End Query in Boolean table-------");
+
+
+}
+
+
+
+//.........................................................................................................
+
+
+public type DateTimeRecord record{
+    
+    int ID;
+    int timestampType;
+    int dateType;
+    int timeType;
+    string intervalType;
+
+};
+function dateTimeTableSelection(jdbc:Client jdbcClient, string columns = "*",string condition = "True") returns sql:Error?{
+    //         "timestampType":"timestamp",
+    //         "dateType":"date",
+    //         "timeType":"time",
+    //         "intervalType":"interval"
+     io:println("------ Start Query in DateTime table-------");
+
+    string selectionQuery = selecionQueryMaker("dateTimeTypes",columns,condition);
+
+    // selectionQuery = "Select ID,timestampType,dateType,timeType, intervalType::int from dateTimeTypes where True";
+        stream<record{}, error> resultStream =
+        jdbcClient->query(selectionQuery, DateTimeRecord);
+
+    // io:println(resultStream);
+    // if(resultStream is sql:Error){
+    //     io:println("resultStream");
+    //     io:println(resultStream);
+    // }
+
+    stream<DateTimeRecord, sql:Error> customerStream =
+        <stream<DateTimeRecord, sql:Error>>resultStream;
+
+        // io:println(customerStream);
+    
+    error? e = customerStream.forEach(function(DateTimeRecord rec) {
+        io:println("\n");
+        io:println(rec);
+        io:println(rec.timestampType);
+        io:println(rec.dateType);
+        io:println(rec.timeType);
+        io:println(rec.intervalType);
+        io:println("\n");
+    });
+    
+    if (e is error) {
+        io:println(e);
+    }
+
+    io:println("------ End Query in DateTime table-------");
+
+
+}
+
+
+
+
+//.........................................................................................................
+
+
+
+public type BinaryRecord record{
+
+    int ID;
+    byte[] byteaType;
+
+};
+
+function binaryTableSelection(jdbc:Client jdbcClient, string columns = "*",string condition = "True") returns sql:Error?{
+        // "byteaType":"bytea" 
+
+     io:println("------ Start Query in Binary table-------");
+
+    string selectionQuery = selecionQueryMaker("binaryTypes",columns,condition);
+        stream<record{}, error> resultStream =
+        jdbcClient->query(selectionQuery, BinaryRecord);
+
+    // io:println(resultStream);
+
+    stream<BinaryRecord, sql:Error> customerStream =
+        <stream<BinaryRecord, sql:Error>>resultStream;
+
+        // io:println(customerStream);
+    
+    error? e = customerStream.forEach(function(BinaryRecord rec) {
+        io:println("\n");
+        io:println(rec);
+        io:println(rec.byteaType);
+        io:println("\n");
+    });
+    
+    if (e is error) {
+        io:println(e);
+    }
+
+    io:println("------ End Query in Binary table-------");
+
+
+}
+
+
+
+
+
+
+
+
+
+
 
 //'''''''''''''''
 public type characterRecord record{
@@ -579,20 +949,20 @@ function insertCharacterTable(jdbc:Client jdbcClient , string charType, string v
 function binaryTableInsertions(jdbc:Client jdbcClient) returns sql:ExecutionResult|sql:Error?{
 
     sql:ExecutionResult|sql:Error? result;
-    byte[] byteArray1 = [5, 24, 56, 243];
+    byte[] byteArray1 = [5, 24, 56, 243, 24, 56, 243, 24, 56, 243, 24, 56, 243, 24, 56, 243, 24, 56, 243, 24, 56, 243, 24, 56, 243, 24, 56, 243];
 
-    byte[] byteArray2 = base16 `aeeecdefabcd12345567888822`;
+    byte[] byteArray2 = base16 `aeeecdefabcd12345567888822aeeecdefabcd12345567888822aeeecdefabcd12345567888822aeeecdefabcd12345567888822aeeecdefabcd12345567888822`;
 
     byte[] byteArray3 = base64 `aGVsbG8gYmFsbGVyaW5hICEhIQ==`;
 
     result = insertBinaryTable(jdbcClient,
     
-    "\\xDEADBEEF"
+    "\\xDEADBEEFDEADBEEFDEADBEEFDEADBEEFDEADBEEFDEADBEEFDEADBEEFDEADBEEFDEADBEEFDEADBEEFDEADBEEFDEADBEEFDEADBEEFDEADBEEFDEADBEEFDEADBEEF"
 
     );
     result = insertBinaryTable(jdbcClient,
     
-        "abc \\153\\154\\155 \\052\\251\\124"
+        "abc \\153\\154\\155 \\052\\251\\124\\153\\154\\155 \\052\\251\\124\\153\\154\\155 \\052\\251\\124\\153\\154\\155 \\052\\251\\124\\153\\154\\155 \\052\\251\\124"
 
     );
     result = insertBinaryTable(jdbcClient,
@@ -894,14 +1264,14 @@ function BitTableInsertions(jdbc:Client jdbcClient) returns sql:ExecutionResult|
     sql:ExecutionResult|sql:Error? result;
     result = insertBitTable(jdbcClient,
     
-    "101","B101","B101","B101"
+    "111","B001","B100","B101"
 
     );
-    result = insertBitTable(jdbcClient,
+    // result = insertBitTable(jdbcClient,
     
-        "001","B101","B101","B101"
+    //     "001","B101","B101","B101"
 
-    );
+    // );
     return result;
 
 }
