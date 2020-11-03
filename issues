@@ -14,3 +14,5 @@
 5. in record type int get decimal but when put to the outside it only publish int
 
 6. Whe we give money values as normal ecimals it works. but edge cases work for sytring only
+
+7. Text value cannot get as a a io:readableBytechannel??
