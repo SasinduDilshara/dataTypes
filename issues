@@ -8,3 +8,9 @@
 2. Ballerina:Time:time give error while it pass to a datetime function        
 
 3. Time with timezone give an error.
+
+4. Numeric and rel got 0 for end
+
+5. in record type int get decimal but when put to the outside it only publish int
+
+6. Whe we give money values as normal ecimals it works. but edge cases work for sytring only

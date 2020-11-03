@@ -131,6 +131,68 @@ function insertQueryMaker(map<string> args) returns InsertQueries{
 } 
 
 
+function tableCreations(jdbc:Client jdbcClient) returns int|string|sql:Error?{
+
+    int|string|sql:Error? result;
+
+    // result = createNumericTable(jdbcClient);
+    // result = createMoneyTable(jdbcClient);
+    result = createCharacterTable(jdbcClient);
+    // result = createBinaryTable(jdbcClient);
+    // result = createDateTimeTable(jdbcClient);
+    // result = createBooleanTable(jdbcClient);
+    // result = createEnumTable(jdbcClient);
+    // result = createGeometricTable(jdbcClient);
+    // result = createNetworkTable(jdbcClient);
+    // result = createBitTable(jdbcClient);
+    // result = createTextSearchTable(jdbcClient);
+    // result = createUuidTable(jdbcClient);
+    // result = createXmlTable(jdbcClient);
+    // result = createJsonTable(jdbcClient);
+    // result = createArrayTable(jdbcClient);
+    // result = createCompositeTable(jdbcClient);
+    // result = createRangeTable(jdbcClient);
+    // result = createDomainTable(jdbcClient);
+    // result = createObjectIdentifierTable(jdbcClient);
+    // result = createPglsnTable(jdbcClient);
+    // result = createPseudoTypeTable(jdbcClient);
+    
+     return result;   
+
+
+}
+
+function tableInsertions(jdbc:Client jdbcClient) returns sql:ExecutionResult|sql:Error?{
+
+    sql:ExecutionResult|sql:Error? result;
+
+
+    // result = numericTableInsertions(jdbcClient);
+    // result = moneyTableInsertions(jdbcClient);
+    result = characterTableInsertions(jdbcClient);
+    // result = binaryTableInsertions(jdbcClient);
+    // result = DateTimeTableInsertions(jdbcClient);
+    // result = booleanTimeTableInsertions(jdbcClient);
+    // result = enumTableInsertions(jdbcClient);
+    // result = geometricTableInsertions(jdbcClient);
+    // result = networkTableInsertions(jdbcClient);
+    // result = BitTableInsertions(jdbcClient);
+    // result = textSearchTableInsertions(jdbcClient);
+    // result = UUIDTableInsertions(jdbcClient);
+    // result = xmlTableInsertions(jdbcClient);
+    // result = JsonTableInsertions(jdbcClient);
+    // result = arrayTableInsertions(jdbcClient);
+    // result = ComplexTableInsertions(jdbcClient);
+    // result = RangeTableInsertions(jdbcClient);
+    // result = domainTableInsertions(jdbcClient);
+    // result = objectIdentifierTableInsertions(jdbcClient);
+    // result = pslgnTableInsertions(jdbcClient);
+
+
+    return result;
+}
+
+
 
 public function main() {
     jdbc:Client|sql:Error jdbcClient =  new ("jdbc:postgresql://localhost:5432/datatypes","postgres","postgres");
@@ -142,8 +204,14 @@ public function main() {
         int|string|sql:Error? err = tableCreations(jdbcClient);
 
         sql:ExecutionResult| sql:Error? insertResult = tableInsertions(jdbcClient);
+
+        sql:Error? selectionResult = tableSelections(jdbcClient);
         
-        sql:Error? e = jdbcClient.close();   
+        sql:Error? e = jdbcClient.close();  
+
+        if(e is sql:Error){
+            io:println("Conection close failed!!");
+        } 
     } 
     else {
         io:println("Initialization failed!!");
@@ -151,40 +219,198 @@ public function main() {
     }
 }
 
+//===============================================================================================================================================================
+//===============================================================================================================================================================
 
 
+function tableSelections(jdbc:Client jdbcClient) returns sql:Error?{
 
+        sql:Error? result;
 
+        // result = numericTableSelection(jdbcClient);
+        // result = moneyTableSelection(jdbcClient);
+        result = characterTableSelection(jdbcClient);
+        // result = moneyTableSelection(jdbcClient);
+        // result = moneyTableSelection(jdbcClient);
+        // result = moneyTableSelection(jdbcClient);
+        // result = moneyTableSelection(jdbcClient);
+        // result = moneyTableSelection(jdbcClient);
+        // result = moneyTableSelection(jdbcClient);
+        // result = moneyTableSelection(jdbcClient);
+        // result = moneyTableSelection(jdbcClient);
+        // result = moneyTableSelection(jdbcClient);
+        // result = moneyTableSelection(jdbcClient);
+        // result = moneyTableSelection(jdbcClient);
+        // result = moneyTableSelection(jdbcClient);
+        // result = moneyTableSelection(jdbcClient);
+        // result = moneyTableSelection(jdbcClient);
+        // result = moneyTableSelection(jdbcClient);
 
-function tableInsertions(jdbc:Client jdbcClient) returns sql:ExecutionResult|sql:Error?{
-
-    sql:ExecutionResult|sql:Error? result;
-
-
-    result = numericTableInsertions(jdbcClient);
-    result = moneyTableInsertions(jdbcClient);
-    result = characterTableInsertions(jdbcClient);
-    result = binaryTableInsertions(jdbcClient);
-    result = DateTimeTableInsertions(jdbcClient);
-    result = booleanTimeTableInsertions(jdbcClient);
-    result = enumTableInsertions(jdbcClient);
-    result = geometricTableInsertions(jdbcClient);
-    result = networkTableInsertions(jdbcClient);
-    result = BitTableInsertions(jdbcClient);
-    result = textSearchTableInsertions(jdbcClient);
-    result = UUIDTableInsertions(jdbcClient);
-    result = xmlTableInsertions(jdbcClient);
-    result = JsonTableInsertions(jdbcClient);
-    result = arrayTableInsertions(jdbcClient);
-    result = ComplexTableInsertions(jdbcClient);
-    result = RangeTableInsertions(jdbcClient);
-    result = domainTableInsertions(jdbcClient);
-    result = objectIdentifierTableInsertions(jdbcClient);
-    result = pslgnTableInsertions(jdbcClient);
-
-
-    return result;
+        return result;
+        
 }
+
+
+function selecionQueryMaker(string tableName , string columns = "*",string condition = "True") returns string{
+
+    return "Select " + columns + " from "+ tableName + " where " + condition;
+
+}
+
+//'''''''''''''''
+public type characterRecord record{
+
+    string ID;
+    string charType;
+    string varcharType;
+    string textType;
+    string nameType;
+    string charWithoutLengthType;
+
+};
+
+function characterTableSelection(jdbc:Client jdbcClient, string columns = "*",string condition = "True") returns sql:Error?{
+    //         "charType":"char(10)",
+    //         "varcharType":"varchar(10)",
+    //         "textType":"text",
+    //         "nameType":"name",
+    //         "charWithoutLengthType": "char"
+     io:println("------ Start Query in character table-------");
+
+    string selectionQuery = selecionQueryMaker("charTypes",columns,condition);
+        stream<record{}, error> resultStream =
+        jdbcClient->query(selectionQuery, characterRecord);
+
+    io:println(resultStream);
+
+    stream<characterRecord, sql:Error> customerStream =
+        <stream<characterRecord, sql:Error>>resultStream;
+
+        io:println(customerStream);
+
+    error? e = customerStream.forEach(function(characterRecord rec) {
+        io:println(rec);
+        io:println(rec.charType);
+        io:println(rec.varcharType);
+        io:println(rec.textType);
+        io:println(rec.nameType);
+        io:println(rec.charWithoutLengthType);
+        
+    });
+    if (e is error) {
+        io:println(e);
+    }
+
+    io:println("------ End Query in character table-------");
+
+
+}
+
+//''''''''''''''''''''''''''''''
+
+
+
+
+public type moneyRecord record{
+
+    int ID;
+    int moneyType;
+
+};
+
+function moneyTableSelection(jdbc:Client jdbcClient, string columns = "*",string condition = "True") returns sql:Error?{
+    // "MoneyType":"money"
+     io:println("------ Start Query in money table-------");
+
+    string selectionQuery = selecionQueryMaker("moneyTypes","ID, moneytype::numeric::float8",condition);
+        stream<record{}, error> resultStream =
+        jdbcClient->query(selectionQuery, moneyRecord);
+
+    io:println(resultStream);
+
+    stream<moneyRecord, sql:Error> customerStream =
+        <stream<moneyRecord, sql:Error>>resultStream;
+
+        io:println(customerStream);
+
+    error? e = customerStream.forEach(function(moneyRecord rec) {
+        io:println(rec);
+        io:println(rec.moneyType);
+        
+    });
+    if (e is error) {
+        io:println(e);
+    }
+
+    io:println("------ End Query in money table-------");
+
+
+}
+
+
+public type numericRecord record{
+
+    int ID;
+    int smallIntType;
+    int intType;
+    int bigIntType;
+    decimal decimalType;
+    decimal numericType;
+    float realType;
+    float doublePrecisionType;
+    int smallSerialType;
+    int serialType;
+    int bigSerialType;
+
+};
+
+function numericTableSelection(jdbc:Client jdbcClient, string columns = "*",string condition = "True") returns sql:Error?{
+
+     io:println("------ Start Query in numerica table-------");
+
+    string selectionQuery = selecionQueryMaker("numericTypes",columns,condition);
+        stream<record{}, error> resultStream =
+        jdbcClient->query(selectionQuery, numericRecord);
+
+    stream<numericRecord, sql:Error> customerStream =
+        <stream<numericRecord, sql:Error>>resultStream;
+
+    error? e = customerStream.forEach(function(numericRecord rec) {
+        io:println(rec);
+        io:println(rec.smallIntType);
+        io:println(rec.intType);
+        io:println(rec.bigIntType);
+        io:println(rec.decimalType);
+        io:println(rec.numericType);
+        io:println(rec.realType);
+        io:println(rec.doublePrecisionType);
+        io:println(rec.smallSerialType);
+        io:println(rec.serialType);
+        io:println(rec.bigSerialType);
+        
+    });
+    if (e is error) {
+        io:println(e);
+    }
+
+    io:println("------ End Query in numerica table-------");
+
+
+}
+
+
+
+
+
+
+
+
+
+
+// ======================================================================================================================================================================================================================================================================
+// ======================================================================================================================================================================================================================================================================
+
+
 
 function numericTableInsertions(jdbc:Client jdbcClient) returns sql:ExecutionResult|sql:Error?{
 
@@ -193,12 +419,32 @@ function numericTableInsertions(jdbc:Client jdbcClient) returns sql:ExecutionRes
     sql:ExecutionResult|sql:Error? result;
     result = insertNumericTable(jdbcClient,
     
-        1,1,1,1,1,1,1,1,1,1
+        -32768,-2147483648,-9223372036854775808,
+        1.2,
+        2.33,
+        123456.123456,
+        123456789.123456,
+        1,1,1
 
     );
     result = insertNumericTable(jdbcClient,
     
-        3,3,3,3,3,3,3,3,3,3
+        -32768,-2147483648,-9223372036854775808,
+        -92233720368547758079223372036854775807.92233720368547758079223372036854775807,
+        -19223372036854775807922337203685477580792233720368547758079223372036854775807.92233720368547758079223372036854775807,
+        123456.123456,
+        123456789.123456,
+        1,1,1
+
+    );
+    result = insertNumericTable(jdbcClient,
+    
+        32767,2147483647,9223372036854775807,
+        9223372036854775807922337203685477580792233720368547758079223372036854775807.92233720368547758079223372036854775807,
+        -9223372036854775807922337203685477580792233720368547758079223372036854775807.92233720368547758079223372036854775807,
+        0.123456,
+        1.111222333444555,
+        32767,2147483647,9223372036854775807
     );
     return result;
 
@@ -238,12 +484,12 @@ function moneyTableInsertions(jdbc:Client jdbcClient) returns sql:ExecutionResul
     sql:ExecutionResult|sql:Error? result;
     result = insertMoneyTable(jdbcClient,
     
-    30.751
+    "-92233720368547758.08"
 
     );
     result = insertMoneyTable(jdbcClient,
     
-        "1076567.5"
+        "92233720368547758.07"
 
     );
     return result;
@@ -256,7 +502,7 @@ function insertMoneyTable(jdbc:Client jdbcClient , string|int|float|decimal mone
             `INSERT INTO moneyTypes (
                 moneyType              ) 
              VALUES (
-                ${moneyType} ::float8::numeric::money 
+                ${moneyType} ::numeric::money 
             )`;
     
 
@@ -1170,25 +1416,7 @@ function insertPslgnTable(jdbc:Client jdbcClient ,string pglsnType) returns sql:
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+//==================================================================================================================================================================================
 
 
 
@@ -1232,37 +1460,6 @@ public function createQueryMaker(map<string> args, string primarykey) returns Cr
 
 }
 
-
-function tableCreations(jdbc:Client jdbcClient) returns int|string|sql:Error?{
-
-    int|string|sql:Error? result;
-
-    result = createNumericTable(jdbcClient);
-    result = createMoneyTable(jdbcClient);
-    result = createCharacterTable(jdbcClient);
-    result = createBinaryTable(jdbcClient);
-    result = createDateTimeTable(jdbcClient);
-    result = createBooleanTable(jdbcClient);
-    result = createEnumTable(jdbcClient);
-    result = createGeometricTable(jdbcClient);
-    result = createNetworkTable(jdbcClient);
-    result = createBitTable(jdbcClient);
-    result = createTextSearchTable(jdbcClient);
-    result = createUuidTable(jdbcClient);
-    result = createXmlTable(jdbcClient);
-    result = createJsonTable(jdbcClient);
-    result = createArrayTable(jdbcClient);
-    result = createCompositeTable(jdbcClient);
-    result = createRangeTable(jdbcClient);
-    result = createDomainTable(jdbcClient);
-    result = createObjectIdentifierTable(jdbcClient);
-    result = createPglsnTable(jdbcClient);
-    // result = createPseudoTypeTable(jdbcClient);
-    
-     return result;   
-
-
-}
 
 
 
