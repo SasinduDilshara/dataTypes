@@ -151,8 +151,8 @@ function tableCreations(jdbc:Client jdbcClient) returns int|string|sql:Error?{
     // result = createXmlTable(jdbcClient);
     // result = createJsonTable(jdbcClient);
     // result = createArrayTable(jdbcClient);
-    result = createCompositeTable(jdbcClient);
-    // result = createRangeTable(jdbcClient);
+    // result = createCompositeTable(jdbcClient);
+    result = createRangeTable(jdbcClient);
     // result = createDomainTable(jdbcClient);
     // result = createObjectIdentifierTable(jdbcClient);
     // result = createPglsnTable(jdbcClient);
@@ -184,8 +184,8 @@ function tableInsertions(jdbc:Client jdbcClient) returns sql:ExecutionResult|sql
     // result = xmlTableInsertions(jdbcClient);
     // result = JsonTableInsertions(jdbcClient);
     // result = arrayTableInsertions(jdbcClient);
-    result = ComplexTableInsertions(jdbcClient);
-    // result = RangeTableInsertions(jdbcClient);
+    // result = ComplexTableInsertions(jdbcClient);
+    result = RangeTableInsertions(jdbcClient);
     // result = domainTableInsertions(jdbcClient);
     // result = objectIdentifierTableInsertions(jdbcClient);
     // result = pslgnTableInsertions(jdbcClient);
@@ -245,8 +245,8 @@ function tableSelections(jdbc:Client jdbcClient) returns sql:Error?{
         // result = xmlTableSelection(jdbcClient);
         // result = jsonTableSelection(jdbcClient);
         // result = arrayTableSelection(jdbcClient);
-        result = complexTableSelection(jdbcClient);
-        // result = moneyTableSelection(jdbcClient);
+        // result = complexTableSelection(jdbcClient);
+        result = rangeTableSelection(jdbcClient);
         // result = moneyTableSelection(jdbcClient);
         // result = moneyTableSelection(jdbcClient);
 
@@ -264,6 +264,61 @@ function selecionQueryMaker(string tableName , string columns = "*",string condi
 
 //.........................................................................................................
 
+
+
+public type RangeRecord record{
+    
+    int ID;
+    string int4rangeType;
+    string int8rangeType;
+    string numrangeType;
+    string tsrangeType;
+    string tstzrangeType;
+    string daterangeType;
+    string floatrangeType;
+};
+
+
+function rangeTableSelection(jdbc:Client jdbcClient, string columns = "*",string condition = "True") returns sql:Error?{
+            // "int4rangeType":"int4range",
+            // "int8rangeType":"int8range",
+            // "numrangeType":"numrange",
+            // "tsrangeType":"tsrange",
+            // "tstzrangeType":"tstzrange",
+            // "daterangeType":"daterange",
+            // "floatrangeType":"floatrange"
+    io:println("------ Start Query in Range table-------");
+    string selectionQuery = selecionQueryMaker("rangeTypes",columns,condition);
+
+
+        stream<record{}, error> resultStream =
+        jdbcClient->query(selectionQuery, RangeRecord);
+
+
+    stream<RangeRecord, sql:Error> customerStream =
+        <stream<RangeRecord, sql:Error>>resultStream;
+    
+    error? e = customerStream.forEach(function(RangeRecord rec) {
+        io:println("\n");
+        io:println(rec);
+        io:println(rec.int4rangeType);
+        io:println(rec.int8rangeType);
+        io:println(rec.numrangeType);
+        io:println(rec.tsrangeType);
+        io:println(rec.tstzrangeType);
+        io:println(rec.daterangeType);
+        io:println(rec.floatrangeType);
+        io:println("\n");
+    });
+    
+    if (e is error) {
+        io:println(e);
+    }
+
+    io:println("------ End Query in Range table-------");
+
+
+}
 
 
 
@@ -1945,7 +2000,7 @@ function RangeTableInsertions(jdbc:Client jdbcClient) returns sql:ExecutionResul
     result = insertRangeTable(jdbcClient,
     
 
-        "(2,50)","(10,100)","(0,24)","(2010-01-01 14:30, 2010-01-01 15:30)","(2010-01-01 14:30, 2010-01-01 15:30)","(2010-01-01 14:30, 2010-01-01 )","(1,4)"
+        "(2,50)","(10,100)","(0,24)","(2010-01-01 14:30, 2010-01-01 15:30)","(2010-01-01 14:30, 2010-01-01 15:30)","(2010-01-01 14:30, 2010-01-03 )","(1,4)"
     );
     result = insertRangeTable(jdbcClient,
     
