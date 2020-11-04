@@ -20,3 +20,5 @@
 8. Time interval cannot cast to int. only or string 
 
 9. bit(3) need to cast, xml most of need to cast
+
+10. when record type float[] given propmt err null cant map. ex:- complex time.

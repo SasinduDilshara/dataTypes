@@ -150,8 +150,8 @@ function tableCreations(jdbc:Client jdbcClient) returns int|string|sql:Error?{
     // result = createUuidTable(jdbcClient);
     // result = createXmlTable(jdbcClient);
     // result = createJsonTable(jdbcClient);
-    result = createArrayTable(jdbcClient);
-    // result = createCompositeTable(jdbcClient);
+    // result = createArrayTable(jdbcClient);
+    result = createCompositeTable(jdbcClient);
     // result = createRangeTable(jdbcClient);
     // result = createDomainTable(jdbcClient);
     // result = createObjectIdentifierTable(jdbcClient);
@@ -183,8 +183,8 @@ function tableInsertions(jdbc:Client jdbcClient) returns sql:ExecutionResult|sql
     // result = UUIDTableInsertions(jdbcClient);
     // result = xmlTableInsertions(jdbcClient);
     // result = JsonTableInsertions(jdbcClient);
-    result = arrayTableInsertions(jdbcClient);
-    // result = ComplexTableInsertions(jdbcClient);
+    // result = arrayTableInsertions(jdbcClient);
+    result = ComplexTableInsertions(jdbcClient);
     // result = RangeTableInsertions(jdbcClient);
     // result = domainTableInsertions(jdbcClient);
     // result = objectIdentifierTableInsertions(jdbcClient);
@@ -244,8 +244,8 @@ function tableSelections(jdbc:Client jdbcClient) returns sql:Error?{
         // result = uuidTableSelection(jdbcClient);
         // result = xmlTableSelection(jdbcClient);
         // result = jsonTableSelection(jdbcClient);
-        result = arrayTableSelection(jdbcClient);
-        // result = moneyTableSelection(jdbcClient);
+        // result = arrayTableSelection(jdbcClient);
+        result = complexTableSelection(jdbcClient);
         // result = moneyTableSelection(jdbcClient);
         // result = moneyTableSelection(jdbcClient);
         // result = moneyTableSelection(jdbcClient);
@@ -272,42 +272,58 @@ function selecionQueryMaker(string tableName , string columns = "*",string condi
 
 
 
-// public type UuidRecord record{
+public type ComplexRecord record{
     
-//     int ID;
-//     byte[] uuidType;
-// };
-
-
-// function uuidTableSelection(jdbc:Client jdbcClient, string columns = "*",string condition = "True") returns sql:Error?{
-// // "uuidType":"uuid"
-//      io:println("------ Start Query in Uuid table-------");
-
-//     string selectionQuery = selecionQueryMaker("uuidTypes",columns,condition);
-
-
-//         stream<record{}, error> resultStream =
-//         jdbcClient->query(selectionQuery, UuidRecord);
-
-
-//     stream<UuidRecord, sql:Error> customerStream =
-//         <stream<UuidRecord, sql:Error>>resultStream;
+    int ID;
     
-//     error? e = customerStream.forEach(function(UuidRecord rec) {
-//         io:println("\n");
-//         io:println(rec);
-//         io:println(rec.uuidType);
-//         io:println("\n");
-//     });
+    string complexType;
+    string inventoryType;
+
+    // record{|
+    //     decimal r;
+    //     decimal i;
+    // |} complexType;
+
+    // record{|
+    //     string name;
+    //     decimal supplier_id;
+    //     decimal price;
+    // |} inventoryType;
     
-//     if (e is error) {
-//         io:println(e);
-//     }
-
-//     io:println("------ End Query in Uuid table-------");
+};
 
 
-// }
+function complexTableSelection(jdbc:Client jdbcClient, string columns = "*",string condition = "True") returns sql:Error?{
+            // "complexType":"complex",
+            // "inventoryType":"inventory_item"
+    io:println("------ Start Query in Complex table-------");
+
+    string selectionQuery = selecionQueryMaker("complexTypes",columns,condition);
+
+        selectionQuery = "select complexType::text , inventoryType::text from complexTypes";
+        stream<record{}, error> resultStream =
+        jdbcClient->query(selectionQuery, ComplexRecord);
+
+
+    stream<ComplexRecord, sql:Error> customerStream =
+        <stream<ComplexRecord, sql:Error>>resultStream;
+    
+    error? e = customerStream.forEach(function(ComplexRecord rec) {
+        io:println("\n");
+        io:println(rec);
+        // io:println(rec.complexType.r);
+        // io:println(rec.inventoryType.name);
+        // io:println("\n");
+    });
+    
+    if (e is error) {
+        io:println(e);
+    }
+
+    io:println("------ End Query in Complex table-------");
+
+
+}
 
 
 
