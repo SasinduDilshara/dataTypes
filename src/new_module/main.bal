@@ -144,10 +144,10 @@ function tableCreations(jdbc:Client jdbcClient) returns int|string|sql:Error?{
     // result = createEnumTable(jdbcClient);
     // result = createGeometricTable(jdbcClient);
     // result = createNetworkTable(jdbcClient);
-    result = createBitTable(jdbcClient);
+    // result = createBitTable(jdbcClient);
 
     // result = createTextSearchTable(jdbcClient);
-    // result = createUuidTable(jdbcClient);
+    result = createUuidTable(jdbcClient);
     // result = createXmlTable(jdbcClient);
     // result = createJsonTable(jdbcClient);
     // result = createArrayTable(jdbcClient);
@@ -177,10 +177,10 @@ function tableInsertions(jdbc:Client jdbcClient) returns sql:ExecutionResult|sql
     // result = enumTableInsertions(jdbcClient);
     // result = geometricTableInsertions(jdbcClient);
     // result = networkTableInsertions(jdbcClient);
-    result = BitTableInsertions(jdbcClient);
+    // result = BitTableInsertions(jdbcClient);
 
     // result = textSearchTableInsertions(jdbcClient);
-    // result = UUIDTableInsertions(jdbcClient);
+    result = UUIDTableInsertions(jdbcClient);
     // result = xmlTableInsertions(jdbcClient);
     // result = JsonTableInsertions(jdbcClient);
     // result = arrayTableInsertions(jdbcClient);
@@ -238,10 +238,10 @@ function tableSelections(jdbc:Client jdbcClient) returns sql:Error?{
         // result = enumTableSelection(jdbcClient);
         // result = geometricTableSelection(jdbcClient);
         // result = networkTableSelection(jdbcClient);
-        result = bitTableSelection(jdbcClient);
+        // result = bitTableSelection(jdbcClient);
 
-        // result = moneyTableSelection(jdbcClient);
-        // result = moneyTableSelection(jdbcClient);
+        // result = textsearchTableSelection(jdbcClient);
+        result = uuidTableSelection(jdbcClient);
         // result = moneyTableSelection(jdbcClient);
         // result = moneyTableSelection(jdbcClient);
         // result = moneyTableSelection(jdbcClient);
@@ -259,6 +259,153 @@ function selecionQueryMaker(string tableName , string columns = "*",string condi
     return "Select " + columns + " from "+ tableName + " where " + condition;
 
 }
+
+
+
+//.........................................................................................................
+
+
+
+
+public type UuidRecord record{
+    
+    int ID;
+    string uuidType;
+};
+
+
+function uuidTableSelection(jdbc:Client jdbcClient, string columns = "*",string condition = "True") returns sql:Error?{
+// "uuidType":"uuid"
+     io:println("------ Start Query in Uuid table-------");
+
+    string selectionQuery = selecionQueryMaker("uuidTypes",columns,condition);
+
+
+        stream<record{}, error> resultStream =
+        jdbcClient->query(selectionQuery, UuidRecord);
+
+
+    stream<UuidRecord, sql:Error> customerStream =
+        <stream<UuidRecord, sql:Error>>resultStream;
+    
+    error? e = customerStream.forEach(function(UuidRecord rec) {
+        io:println("\n");
+        io:println(rec);
+        io:println(rec.uuidType);
+        io:println("\n");
+    });
+    
+    if (e is error) {
+        io:println(e);
+    }
+
+    io:println("------ End Query in Uuid table-------");
+
+
+}
+
+
+
+
+//.........................................................................................................
+
+
+
+
+public type UuidRecord record{
+    
+    int ID;
+    string uuidType;
+};
+
+
+function uuidTableSelection(jdbc:Client jdbcClient, string columns = "*",string condition = "True") returns sql:Error?{
+// "uuidType":"uuid"
+     io:println("------ Start Query in Uuid table-------");
+
+    string selectionQuery = selecionQueryMaker("uuidTypes",columns,condition);
+
+
+        stream<record{}, error> resultStream =
+        jdbcClient->query(selectionQuery, UuidRecord);
+
+
+    stream<UuidRecord, sql:Error> customerStream =
+        <stream<UuidRecord, sql:Error>>resultStream;
+    
+    error? e = customerStream.forEach(function(UuidRecord rec) {
+        io:println("\n");
+        io:println(rec);
+        io:println(rec.uuidType);
+        io:println("\n");
+    });
+    
+    if (e is error) {
+        io:println(e);
+    }
+
+    io:println("------ End Query in Uuid table-------");
+
+
+}
+
+
+
+
+
+//........................................................................................................
+
+
+
+
+public type TextSearchRecord record{
+    
+    int ID;
+    string tsvectorType;
+    string tsqueryType;
+};
+
+
+function textsearchTableSelection(jdbc:Client jdbcClient, string columns = "*",string condition = "True") returns sql:Error?{
+//             "tsvectorType":"tsvector",
+//             "tsqueryType":"tsquery"
+     io:println("------ Start Query in TextSearch table-------");
+
+    string selectionQuery = selecionQueryMaker("textsearchTypes",columns,condition);
+
+
+        stream<record{}, error> resultStream =
+        jdbcClient->query(selectionQuery, TextSearchRecord);
+
+
+    stream<TextSearchRecord, sql:Error> customerStream =
+        <stream<TextSearchRecord, sql:Error>>resultStream;
+    
+    error? e = customerStream.forEach(function(TextSearchRecord rec) {
+        io:println("\n");
+        io:println(rec);
+        io:println(rec.tsvectorType);
+        io:println(rec.tsqueryType);
+        io:println("\n");
+    });
+    
+    if (e is error) {
+        io:println(e);
+    }
+
+    io:println("------ End Query in TextSearch table-------");
+
+
+}
+
+
+
+
+
+
+
+
+
 //........................................................................................................
 
 
@@ -268,7 +415,7 @@ public type BitRecord record{
     
     int ID;
     string bitType;
-    float bitVaryType;
+    decimal bitVaryType;
     float bitVaryType2;
     int bitOnlyType;
 };
@@ -295,7 +442,7 @@ function bitTableSelection(jdbc:Client jdbcClient, string columns = "*",string c
     error? e = customerStream.forEach(function(BitRecord rec) {
         io:println("\n");
         io:println(rec);
-        // io:println(rec.bitType);
+        io:println(rec.bitType);
         io:println(rec.bitVaryType);
         io:println(rec.bitVaryType2);
         io:println(rec.bitOnlyType);
@@ -1360,6 +1507,26 @@ function UUIDTableInsertions(jdbc:Client jdbcClient) returns sql:ExecutionResult
     result = insertUUIDTable(jdbcClient,
     
     "A0EEBC99-9C0B-4EF8-BB6D-6BB9BD380A11"
+
+    );
+    result = insertUUIDTable(jdbcClient,
+    
+        "{a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11}"
+
+    );
+    result = insertUUIDTable(jdbcClient,
+    
+    "a0eebc999c0b4ef8bb6d6bb9bd380a11"
+
+    );
+    result = insertUUIDTable(jdbcClient,
+    
+        "a0ee-bc99-9c0b-4ef8-bb6d-6bb9-bd38-0a11"
+
+    );
+    result = insertUUIDTable(jdbcClient,
+    
+        "{a0eebc99-9c0b4ef8-bb6d6bb9-bd380a11}"
 
     );
     result = insertUUIDTable(jdbcClient,
