@@ -272,42 +272,42 @@ function selecionQueryMaker(string tableName , string columns = "*",string condi
 
 
 
-public type UuidRecord record{
+// public type UuidRecord record{
     
-    int ID;
-    byte[] uuidType;
-};
+//     int ID;
+//     byte[] uuidType;
+// };
 
 
-function uuidTableSelection(jdbc:Client jdbcClient, string columns = "*",string condition = "True") returns sql:Error?{
-// "uuidType":"uuid"
-     io:println("------ Start Query in Uuid table-------");
+// function uuidTableSelection(jdbc:Client jdbcClient, string columns = "*",string condition = "True") returns sql:Error?{
+// // "uuidType":"uuid"
+//      io:println("------ Start Query in Uuid table-------");
 
-    string selectionQuery = selecionQueryMaker("uuidTypes",columns,condition);
-
-
-        stream<record{}, error> resultStream =
-        jdbcClient->query(selectionQuery, UuidRecord);
+//     string selectionQuery = selecionQueryMaker("uuidTypes",columns,condition);
 
 
-    stream<UuidRecord, sql:Error> customerStream =
-        <stream<UuidRecord, sql:Error>>resultStream;
+//         stream<record{}, error> resultStream =
+//         jdbcClient->query(selectionQuery, UuidRecord);
+
+
+//     stream<UuidRecord, sql:Error> customerStream =
+//         <stream<UuidRecord, sql:Error>>resultStream;
     
-    error? e = customerStream.forEach(function(UuidRecord rec) {
-        io:println("\n");
-        io:println(rec);
-        io:println(rec.uuidType);
-        io:println("\n");
-    });
+//     error? e = customerStream.forEach(function(UuidRecord rec) {
+//         io:println("\n");
+//         io:println(rec);
+//         io:println(rec.uuidType);
+//         io:println("\n");
+//     });
     
-    if (e is error) {
-        io:println(e);
-    }
+//     if (e is error) {
+//         io:println(e);
+//     }
 
-    io:println("------ End Query in Uuid table-------");
+//     io:println("------ End Query in Uuid table-------");
 
 
-}
+// }
 
 
 
@@ -339,6 +339,7 @@ function arrayTableSelection(jdbc:Client jdbcClient, string columns = "*",string
     string selectionQuery = selecionQueryMaker("arrayTypes",columns,condition);
 
     selectionQuery = "select textArrayType::text, textArray2Type, integerArrayType, integerArray2Type::text,arrayType,array2Type from arrayTypes";
+    // selectionQuery = "select textArrayType::text[], textArray2Type, integerArrayType, integerArray2Type::int[],arrayType,array2Type from arrayTypes";
 
 
         stream<record{}, error> resultStream =
