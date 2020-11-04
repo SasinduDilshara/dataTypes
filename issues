@@ -18,3 +18,5 @@
 7. Text,Binary value cannot get as a a io:readableBytechannel??  (But build it in sql)
 
 8. Time interval cannot cast to int. only or string 
+
+9. bit(3) need to cast, xml most of need to cast

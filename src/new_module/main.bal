@@ -147,10 +147,10 @@ function tableCreations(jdbc:Client jdbcClient) returns int|string|sql:Error?{
     // result = createBitTable(jdbcClient);
 
     // result = createTextSearchTable(jdbcClient);
-    result = createUuidTable(jdbcClient);
+    // result = createUuidTable(jdbcClient);
     // result = createXmlTable(jdbcClient);
     // result = createJsonTable(jdbcClient);
-    // result = createArrayTable(jdbcClient);
+    result = createArrayTable(jdbcClient);
     // result = createCompositeTable(jdbcClient);
     // result = createRangeTable(jdbcClient);
     // result = createDomainTable(jdbcClient);
@@ -180,10 +180,10 @@ function tableInsertions(jdbc:Client jdbcClient) returns sql:ExecutionResult|sql
     // result = BitTableInsertions(jdbcClient);
 
     // result = textSearchTableInsertions(jdbcClient);
-    result = UUIDTableInsertions(jdbcClient);
+    // result = UUIDTableInsertions(jdbcClient);
     // result = xmlTableInsertions(jdbcClient);
     // result = JsonTableInsertions(jdbcClient);
-    // result = arrayTableInsertions(jdbcClient);
+    result = arrayTableInsertions(jdbcClient);
     // result = ComplexTableInsertions(jdbcClient);
     // result = RangeTableInsertions(jdbcClient);
     // result = domainTableInsertions(jdbcClient);
@@ -241,9 +241,10 @@ function tableSelections(jdbc:Client jdbcClient) returns sql:Error?{
         // result = bitTableSelection(jdbcClient);
 
         // result = textsearchTableSelection(jdbcClient);
-        result = uuidTableSelection(jdbcClient);
-        // result = moneyTableSelection(jdbcClient);
-        // result = moneyTableSelection(jdbcClient);
+        // result = uuidTableSelection(jdbcClient);
+        // result = xmlTableSelection(jdbcClient);
+        // result = jsonTableSelection(jdbcClient);
+        result = arrayTableSelection(jdbcClient);
         // result = moneyTableSelection(jdbcClient);
         // result = moneyTableSelection(jdbcClient);
         // result = moneyTableSelection(jdbcClient);
@@ -261,6 +262,10 @@ function selecionQueryMaker(string tableName , string columns = "*",string condi
 }
 
 
+//.........................................................................................................
+
+
+
 
 //.........................................................................................................
 
@@ -270,7 +275,7 @@ function selecionQueryMaker(string tableName , string columns = "*",string condi
 public type UuidRecord record{
     
     int ID;
-    string uuidType;
+    byte[] uuidType;
 };
 
 
@@ -307,6 +312,163 @@ function uuidTableSelection(jdbc:Client jdbcClient, string columns = "*",string 
 
 
 
+
+//.........................................................................................................
+
+public type ArrayRecord record{
+    
+    int ID;
+    string textArrayType;
+    string[] textArray2Type;
+    int[] integerArrayType;
+    string integerArray2Type;
+    int[5] arrayType;
+    int[] array2Type;
+};
+
+
+function arrayTableSelection(jdbc:Client jdbcClient, string columns = "*",string condition = "True") returns sql:Error?{
+            // "textArrayType":"text[][]",
+            // "textArray2Type":"text[]",
+            // "integerArrayType":"int[]",
+            // "integerArray2Type":"int[][]",
+            // "arrayType":"int array[5]",
+            // "array2Type":"int array"
+     io:println("------ Start Query in Array table-------");
+
+    string selectionQuery = selecionQueryMaker("arrayTypes",columns,condition);
+
+    selectionQuery = "select textArrayType::text, textArray2Type, integerArrayType, integerArray2Type::text,arrayType,array2Type from arrayTypes";
+
+
+        stream<record{}, error> resultStream =
+        jdbcClient->query(selectionQuery, ArrayRecord);
+
+
+    stream<ArrayRecord, sql:Error> customerStream =
+        <stream<ArrayRecord, sql:Error>>resultStream;
+    
+    error? e = customerStream.forEach(function(ArrayRecord rec) {
+        io:println("\n");
+        io:println(rec);
+        io:println(rec.textArrayType);
+        io:println(rec.textArray2Type);
+        io:println(rec.integerArrayType);
+        io:println(rec.integerArray2Type);
+        io:println(rec.arrayType);
+        io:println(rec.array2Type);
+        io:println("\n");
+    });
+    
+    if (e is error) {
+        io:println(e);
+    }
+
+    io:println("------ End Query in Array table-------");
+
+
+}
+
+
+
+
+//.........................................................................................................
+
+
+
+
+public type JsonRecord record{
+    
+    int ID;
+    json jsonType;
+    json jsonbType;
+    string jsonpathType;
+};
+
+
+function jsonTableSelection(jdbc:Client jdbcClient, string columns = "*",string condition = "True") returns sql:Error?{
+//             "jsonType":"json",
+//             "jsonbType":"jsonb",
+//             "jsonpathType":"jsonpath"
+     io:println("------ Start Query in Json table-------");
+
+    string selectionQuery = selecionQueryMaker("jsonTypes",columns,condition);
+
+
+        stream<record{}, error> resultStream =
+        jdbcClient->query(selectionQuery, JsonRecord);
+
+
+    stream<JsonRecord, sql:Error> customerStream =
+        <stream<JsonRecord, sql:Error>>resultStream;
+    
+    error? e = customerStream.forEach(function(JsonRecord rec) {
+        io:println("\n");
+        io:println(rec);
+        io:println(rec.jsonType);
+        io:println(rec.jsonbType);
+        io:println(rec.jsonpathType);
+        io:println("\n");
+    });
+    
+    if (e is error) {
+        io:println(e);
+    }
+
+    io:println("------ End Query in Json table-------");
+
+
+}
+
+
+
+
+//.........................................................................................................
+
+
+
+
+public type XmlRecord record{
+    
+    int ID;
+    string xmlType;
+};
+
+
+function xmlTableSelection(jdbc:Client jdbcClient, string columns = "*",string condition = "True") returns sql:Error?{
+// "xmlType":"xml"
+     io:println("------ Start Query in Xml table-------");
+
+    string selectionQuery = selecionQueryMaker("xmlTypes",columns,condition);
+
+    selectionQuery = "select ID,xmlType::text from xmlTypes";
+
+        stream<record{}, error> resultStream =
+        jdbcClient->query(selectionQuery, XmlRecord);
+
+
+    stream<XmlRecord, sql:Error> customerStream =
+        <stream<XmlRecord, sql:Error>>resultStream;
+    
+    error? e = customerStream.forEach(function(XmlRecord rec) {
+        io:println("\n");
+        io:println(rec);
+        io:println(rec.xmlType);
+        io:println("\n");
+    });
+    
+    if (e is error) {
+        io:println(e);
+    }
+
+    io:println("------ End Query in Xml table-------");
+
+
+}
+
+
+
+
 //.........................................................................................................
 
 
@@ -315,7 +477,7 @@ function uuidTableSelection(jdbc:Client jdbcClient, string columns = "*",string 
 public type UuidRecord record{
     
     int ID;
-    string uuidType;
+    byte[] uuidType;
 };
 
 
@@ -362,7 +524,7 @@ public type TextSearchRecord record{
     
     int ID;
     string tsvectorType;
-    string tsqueryType;
+    byte[] tsqueryType;
 };
 
 
@@ -1569,14 +1731,20 @@ function insertUUIDTable(jdbc:Client jdbcClient ,string uuidType) returns sql:Ex
 function xmlTableInsertions(jdbc:Client jdbcClient) returns sql:ExecutionResult|sql:Error?{
 
     sql:ExecutionResult|sql:Error? result;
+    
     result = insertXmlTable(jdbcClient,
     
-     xml `<foo><tag>bar</tag><tag>tag</tag></foo>`
+        "<foo>bar</foo>"
 
     );
     result = insertXmlTable(jdbcClient,
     
-        "<foo>bar</foo>"
+        "bar"
+
+    );
+    result = insertXmlTable(jdbcClient,
+    
+     xml `<foo><tag>bar</tag><tag>tag</tag></foo>`
 
     );
     return result;
@@ -1664,29 +1832,31 @@ function arrayTableInsertions(jdbc:Client jdbcClient) returns sql:ExecutionResul
     result = insertArrayTable(jdbcClient,
     
 
-            "{{\"A\"},{\"B\"}}", "{1,2,3,4,5}", "{1,2,3,4}","{1,2,3,4,5,6,7}"
+            "{{\"A\"},{\"B\"}}","{\"A\",\"B\",\"\"}", "{1,2,3,4,5}","{{1,2},{3,4}}", "{1,2,3,4}","{1,2,3,4,5,6,7}"
     );
     result = insertArrayTable(jdbcClient,
     
 
-            "{{\"A\"},{\"B\"}}", "{1,2,3,4,5}", "{1,2,3,4}","{1,2,3,4,5,6,7}"
+            "{{\"A\"},{\"B\"}}","{\"A\",\"B\",\"\"}", "{1,2,3,4,5}","{{1,2},{3,4}}", "{1,2,3,4}","{1,2,3,4,5,6,7}"
     );
     return result;
 
 }
 
-function insertArrayTable(jdbc:Client jdbcClient ,string textArrayType , string integerArrayType, string arrayType, string array2Type) returns sql:ExecutionResult|sql:Error?{
+function insertArrayTable(jdbc:Client jdbcClient ,string textArrayType ,string textArray2Type , string integerArrayType, string integerArray2Type, string arrayType, string array2Type) returns sql:ExecutionResult|sql:Error?{
 
-//             "textArrayType":"text[][]",
-//             "integerArrayType":"int[]",
-//             "arrayType":"int array[5]",
-//             "array2Type":"int array"
+            // "textArrayType":"text[][]",
+            // "textArray2Type":"text[]",
+            // "integerArrayType":"int[]",
+            // "integerArray2Type":"int[][]",
+            // "arrayType":"int array[5]",
+            // "array2Type":"int array"
    sql:ParameterizedQuery insertQuery =
             `INSERT INTO arrayTypes (
-                textArrayType, integerArrayType, arrayType, array2Type
+                textArrayType,textArray2Type, integerArrayType,integerArray2Type, arrayType, array2Type
                              ) 
              VALUES (
-                ${textArrayType}::text[][], ${integerArrayType}::int[], ${arrayType}:: int array[5], ${array2Type}:: int array
+                ${textArrayType}::text[][],${textArray2Type}::text[], ${integerArrayType}::int[],${integerArray2Type}::int[][], ${arrayType}:: int array[5], ${array2Type}:: int array
             )`;
     
 
@@ -2336,7 +2506,9 @@ function createArrayTable(jdbc:Client jdbcClient) returns int|string|sql:Error?{
         CreateQueries createTableQuery = createQueryMaker({
             "ID": "SERIAL", 
             "textArrayType":"text[][]",
+            "textArray2Type":"text[]",
             "integerArrayType":"int[]",
+            "integerArray2Type":"int[][]",
             "arrayType":"int array[5]",
             "array2Type":"int array"
         },"ID");
