@@ -1,0 +1,1 @@
+Insert into moneyTypes(moneyType) values (-92233720368547758.08), (+92233720368547758.07);
