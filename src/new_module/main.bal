@@ -135,7 +135,7 @@ function tableCreations(jdbc:Client jdbcClient) returns int|string|sql:Error?{
 
     int|string|sql:Error? result;
 
-    result = createNumericTable(jdbcClient);
+    // result = createNumericTable(jdbcClient);
     result = createMoneyTable(jdbcClient);
     result = createCharacterTable(jdbcClient);
     result = createBinaryTable(jdbcClient);
@@ -168,27 +168,27 @@ function tableInsertions(jdbc:Client jdbcClient) returns sql:ExecutionResult|sql
     sql:ExecutionResult|sql:Error? result;
 
 
-    result = numericTableInsertions(jdbcClient);
+    // result = numericTableInsertions(jdbcClient);
     result = moneyTableInsertions(jdbcClient);
-    result = characterTableInsertions(jdbcClient);
-    result = binaryTableInsertions(jdbcClient);
-    result = DateTimeTableInsertions(jdbcClient);
-    result = booleanTimeTableInsertions(jdbcClient);
-    result = enumTableInsertions(jdbcClient);
-    result = geometricTableInsertions(jdbcClient);
-    result = networkTableInsertions(jdbcClient);
-    result = BitTableInsertions(jdbcClient);
+    // result = characterTableInsertions(jdbcClient);
+    // result = binaryTableInsertions(jdbcClient);
+    // result = DateTimeTableInsertions(jdbcClient);
+    // result = booleanTimeTableInsertions(jdbcClient);
+    // result = enumTableInsertions(jdbcClient);
+    // result = geometricTableInsertions(jdbcClient);
+    // result = networkTableInsertions(jdbcClient);
+    // result = BitTableInsertions(jdbcClient);
 
-    result = textSearchTableInsertions(jdbcClient);
-    result = UUIDTableInsertions(jdbcClient);
-    result = xmlTableInsertions(jdbcClient);
-    result = JsonTableInsertions(jdbcClient);
-    result = arrayTableInsertions(jdbcClient);
-    result = ComplexTableInsertions(jdbcClient);
-    result = RangeTableInsertions(jdbcClient);
-    result = domainTableInsertions(jdbcClient);
-    result = objectIdentifierTableInsertions(jdbcClient);
-    result = pslgnTableInsertions(jdbcClient);
+    // result = textSearchTableInsertions(jdbcClient);
+    // result = UUIDTableInsertions(jdbcClient);
+    // result = xmlTableInsertions(jdbcClient);
+    // result = JsonTableInsertions(jdbcClient);
+    // result = arrayTableInsertions(jdbcClient);
+    // result = ComplexTableInsertions(jdbcClient);
+    // result = RangeTableInsertions(jdbcClient);
+    // result = domainTableInsertions(jdbcClient);
+    // result = objectIdentifierTableInsertions(jdbcClient);
+    // result = pslgnTableInsertions(jdbcClient);
 
 
     return result;
@@ -203,7 +203,7 @@ public function main() {
 
         sql:Error|sql:ExecutionResult result = setUp(jdbcClient);
 
-        int|string|sql:Error? err = tableCreations(jdbcClient);
+        // int|string|sql:Error? err = tableCreations(jdbcClient);
 
         // sql:ExecutionResult| sql:Error? insertResult = tableInsertions(jdbcClient);
 
@@ -229,27 +229,27 @@ function tableSelections(jdbc:Client jdbcClient) returns sql:Error?{
 
         sql:Error? result;
 
-        result = numericTableSelection(jdbcClient);
+        // result = numericTableSelection(jdbcClient);
         result = moneyTableSelection(jdbcClient);
-        result = characterTableSelection(jdbcClient);
-        result = binaryTableSelection(jdbcClient);
-        result = dateTimeTableSelection(jdbcClient);
-        result = BooleanTableSelection(jdbcClient);
-        result = enumTableSelection(jdbcClient);
-        result = geometricTableSelection(jdbcClient);
-        result = networkTableSelection(jdbcClient);
-        result = bitTableSelection(jdbcClient);
+        // result = characterTableSelection(jdbcClient);
+        // result = binaryTableSelection(jdbcClient);
+        // result = dateTimeTableSelection(jdbcClient);
+        // result = BooleanTableSelection(jdbcClient);
+        // result = enumTableSelection(jdbcClient);
+        // result = geometricTableSelection(jdbcClient);
+        // result = networkTableSelection(jdbcClient);
+        // result = bitTableSelection(jdbcClient);
 
-        result = textsearchTableSelection(jdbcClient);
-        result = uuidTableSelection(jdbcClient);
-        result = xmlTableSelection(jdbcClient);
-        result = jsonTableSelection(jdbcClient);
-        result = arrayTableSelection(jdbcClient);
-        result = complexTableSelection(jdbcClient);
-        result = rangeTableSelection(jdbcClient);
-        result = domainTableSelection(jdbcClient);
-        result = objectIdentifierTableSelection(jdbcClient);
-        result = pglsnTableSelection(jdbcClient);
+        // result = textsearchTableSelection(jdbcClient);
+        // result = uuidTableSelection(jdbcClient);
+        // result = xmlTableSelection(jdbcClient);
+        // result = jsonTableSelection(jdbcClient);
+        // result = arrayTableSelection(jdbcClient);
+        // result = complexTableSelection(jdbcClient);
+        // result = rangeTableSelection(jdbcClient);
+        // result = domainTableSelection(jdbcClient);
+        // result = objectIdentifierTableSelection(jdbcClient);
+        // result = pglsnTableSelection(jdbcClient);
 
         return result;
         
