@@ -135,27 +135,27 @@ function tableCreations(jdbc:Client jdbcClient) returns int|string|sql:Error?{
 
     int|string|sql:Error? result;
 
-    // result = createNumericTable(jdbcClient);
-    // result = createMoneyTable(jdbcClient);
-    // result = createCharacterTable(jdbcClient);
-    // result = createBinaryTable(jdbcClient);
-    // result = createDateTimeTable(jdbcClient);
-    // result = createBooleanTable(jdbcClient);
-    // result = createEnumTable(jdbcClient);
-    // result = createGeometricTable(jdbcClient);
-    // result = createNetworkTable(jdbcClient);
-    // result = createBitTable(jdbcClient);
+    result = createNumericTable(jdbcClient);
+    result = createMoneyTable(jdbcClient);
+    result = createCharacterTable(jdbcClient);
+    result = createBinaryTable(jdbcClient);
+    result = createDateTimeTable(jdbcClient);
+    result = createBooleanTable(jdbcClient);
+    result = createEnumTable(jdbcClient);
+    result = createGeometricTable(jdbcClient);
+    result = createNetworkTable(jdbcClient);
+    result = createBitTable(jdbcClient);
 
-    // result = createTextSearchTable(jdbcClient);
-    // result = createUuidTable(jdbcClient);
-    // result = createXmlTable(jdbcClient);
-    // result = createJsonTable(jdbcClient);
-    // result = createArrayTable(jdbcClient);
-    // result = createCompositeTable(jdbcClient);
+    result = createTextSearchTable(jdbcClient);
+    result = createUuidTable(jdbcClient);
+    result = createXmlTable(jdbcClient);
+    result = createJsonTable(jdbcClient);
+    result = createArrayTable(jdbcClient);
+    result = createCompositeTable(jdbcClient);
     result = createRangeTable(jdbcClient);
-    // result = createDomainTable(jdbcClient);
-    // result = createObjectIdentifierTable(jdbcClient);
-    // result = createPglsnTable(jdbcClient);
+    result = createDomainTable(jdbcClient);
+    result = createObjectIdentifierTable(jdbcClient);
+    result = createPglsnTable(jdbcClient);
     // result = createPseudoTypeTable(jdbcClient);
     
      return result;   
@@ -168,27 +168,27 @@ function tableInsertions(jdbc:Client jdbcClient) returns sql:ExecutionResult|sql
     sql:ExecutionResult|sql:Error? result;
 
 
-    // result = numericTableInsertions(jdbcClient);
-    // result = moneyTableInsertions(jdbcClient);
-    // result = characterTableInsertions(jdbcClient);
-    // result = binaryTableInsertions(jdbcClient);
-    // result = DateTimeTableInsertions(jdbcClient);
-    // result = booleanTimeTableInsertions(jdbcClient);
-    // result = enumTableInsertions(jdbcClient);
-    // result = geometricTableInsertions(jdbcClient);
-    // result = networkTableInsertions(jdbcClient);
-    // result = BitTableInsertions(jdbcClient);
+    result = numericTableInsertions(jdbcClient);
+    result = moneyTableInsertions(jdbcClient);
+    result = characterTableInsertions(jdbcClient);
+    result = binaryTableInsertions(jdbcClient);
+    result = DateTimeTableInsertions(jdbcClient);
+    result = booleanTimeTableInsertions(jdbcClient);
+    result = enumTableInsertions(jdbcClient);
+    result = geometricTableInsertions(jdbcClient);
+    result = networkTableInsertions(jdbcClient);
+    result = BitTableInsertions(jdbcClient);
 
-    // result = textSearchTableInsertions(jdbcClient);
-    // result = UUIDTableInsertions(jdbcClient);
-    // result = xmlTableInsertions(jdbcClient);
-    // result = JsonTableInsertions(jdbcClient);
-    // result = arrayTableInsertions(jdbcClient);
-    // result = ComplexTableInsertions(jdbcClient);
+    result = textSearchTableInsertions(jdbcClient);
+    result = UUIDTableInsertions(jdbcClient);
+    result = xmlTableInsertions(jdbcClient);
+    result = JsonTableInsertions(jdbcClient);
+    result = arrayTableInsertions(jdbcClient);
+    result = ComplexTableInsertions(jdbcClient);
     result = RangeTableInsertions(jdbcClient);
-    // result = domainTableInsertions(jdbcClient);
-    // result = objectIdentifierTableInsertions(jdbcClient);
-    // result = pslgnTableInsertions(jdbcClient);
+    result = domainTableInsertions(jdbcClient);
+    result = objectIdentifierTableInsertions(jdbcClient);
+    result = pslgnTableInsertions(jdbcClient);
 
 
     return result;
@@ -205,7 +205,7 @@ public function main() {
 
         int|string|sql:Error? err = tableCreations(jdbcClient);
 
-        sql:ExecutionResult| sql:Error? insertResult = tableInsertions(jdbcClient);
+        // sql:ExecutionResult| sql:Error? insertResult = tableInsertions(jdbcClient);
 
         sql:Error? selectionResult = tableSelections(jdbcClient);
         
@@ -229,26 +229,27 @@ function tableSelections(jdbc:Client jdbcClient) returns sql:Error?{
 
         sql:Error? result;
 
-        // result = numericTableSelection(jdbcClient);
-        // result = moneyTableSelection(jdbcClient);
-        // result = characterTableSelection(jdbcClient);
-        // result = binaryTableSelection(jdbcClient);
-        // result = dateTimeTableSelection(jdbcClient);
-        // result = BooleanTableSelection(jdbcClient);
-        // result = enumTableSelection(jdbcClient);
-        // result = geometricTableSelection(jdbcClient);
-        // result = networkTableSelection(jdbcClient);
-        // result = bitTableSelection(jdbcClient);
+        result = numericTableSelection(jdbcClient);
+        result = moneyTableSelection(jdbcClient);
+        result = characterTableSelection(jdbcClient);
+        result = binaryTableSelection(jdbcClient);
+        result = dateTimeTableSelection(jdbcClient);
+        result = BooleanTableSelection(jdbcClient);
+        result = enumTableSelection(jdbcClient);
+        result = geometricTableSelection(jdbcClient);
+        result = networkTableSelection(jdbcClient);
+        result = bitTableSelection(jdbcClient);
 
-        // result = textsearchTableSelection(jdbcClient);
-        // result = uuidTableSelection(jdbcClient);
-        // result = xmlTableSelection(jdbcClient);
-        // result = jsonTableSelection(jdbcClient);
-        // result = arrayTableSelection(jdbcClient);
-        // result = complexTableSelection(jdbcClient);
+        result = textsearchTableSelection(jdbcClient);
+        result = uuidTableSelection(jdbcClient);
+        result = xmlTableSelection(jdbcClient);
+        result = jsonTableSelection(jdbcClient);
+        result = arrayTableSelection(jdbcClient);
+        result = complexTableSelection(jdbcClient);
         result = rangeTableSelection(jdbcClient);
-        // result = moneyTableSelection(jdbcClient);
-        // result = moneyTableSelection(jdbcClient);
+        result = domainTableSelection(jdbcClient);
+        result = objectIdentifierTableSelection(jdbcClient);
+        result = pglsnTableSelection(jdbcClient);
 
         return result;
         
@@ -264,6 +265,165 @@ function selecionQueryMaker(string tableName , string columns = "*",string condi
 
 //.........................................................................................................
 
+public type characterRecord record{
+
+    int ID;
+    string charType;
+    string varcharType;
+    string textType;
+    string nameType;
+    string charWithoutLengthType;
+
+};
+
+public type moneyRecord record{
+
+    int ID;
+    float moneyType;
+
+};
+
+public type numericRecord record{
+
+    int ID;
+    int smallIntType;
+    int intType;
+    int bigIntType;
+    decimal decimalType;
+    decimal numericType;
+    float realType;
+    float doublePrecisionType;
+    int smallSerialType;
+    int serialType;
+    int bigSerialType;
+
+};
+
+public type NetworkRecord record{
+    
+    int ID;
+    string inetType;
+    string cidrType;
+    string macaddrType;
+    string macaddr8Type;
+};
+
+public type GeometricRecord record{
+    
+    int ID;
+    string pointType;
+    string lineType;
+    string lsegType;
+    string boxType;
+    string pathType;
+    string polygonType;
+    string circleType;
+
+};
+
+public type EnumRecord record{
+    
+    int ID;
+    string enumType;
+
+};
+
+
+public type BooleanRecord record{
+    
+    int ID;
+    boolean booleanType;
+
+};
+
+public type DateTimeRecord record{
+    
+    int ID;
+    int timestampType;
+    int dateType;
+    int timeType;
+    string intervalType;
+
+};
+
+public type BinaryRecord record{
+
+    int ID;
+    byte[] byteaType;
+
+};
+
+
+public type JsonRecord record{
+    
+    int ID;
+    json jsonType;
+    json jsonbType;
+    string jsonpathType;
+};
+
+public type XmlRecord record{
+    
+    int ID;
+    string xmlType;
+};
+
+
+public type UuidRecord record{
+    
+    int ID;
+    byte[] uuidType;
+};
+
+public type TextSearchRecord record{
+    
+    int ID;
+    string tsvectorType;
+    byte[] tsqueryType;
+};
+
+
+public type BitRecord record{
+    
+    int ID;
+    string bitType;
+    decimal bitVaryType;
+    float bitVaryType2;
+    int bitOnlyType;
+};
+
+
+public type ArrayRecord record{
+    
+    int ID;
+    string textArrayType;
+    string[] textArray2Type;
+    int[] integerArrayType;
+    string integerArray2Type;
+    int[5] arrayType;
+    int[] array2Type;
+};
+
+
+public type ComplexRecord record{
+    
+    int ID;
+    
+    string complexType;
+    string inventoryType;
+
+    // record{|
+    //     decimal r;
+    //     decimal i;
+    // |} complexType;
+
+    // record{|
+    //     string name;
+    //     decimal supplier_id;
+    //     decimal price;
+    // |} inventoryType;
+    
+};
 
 
 public type RangeRecord record{
@@ -277,6 +437,220 @@ public type RangeRecord record{
     string daterangeType;
     string floatrangeType;
 };
+
+
+public type DomainRecord record{
+    
+    int ID;
+    int posintType;
+};
+
+
+
+public type ObjectIdentifierRecord record{
+    
+    int ID;
+    string oidType;
+    string regclassType;
+    string regconfigType;
+    string regdictionaryType;
+    string regnamespaceType;
+    string regoperType;
+    string regoperatorType;
+    string regprocType;
+    string regprocedureType;
+    string regroleType;
+    string regtypeType;
+};
+
+
+
+
+
+public type PglsnRecord record{
+    
+    int ID;
+    string pglsnType;
+};
+
+
+
+
+
+//........................................................................................................
+
+
+
+// public type PglsnRecord record{
+    
+//     int ID;
+//     string pglsnType;
+// };
+
+
+function pglsnTableSelection(jdbc:Client jdbcClient, string columns = "*",string condition = "True") returns sql:Error?{
+// "pglsnType" : "pg_lsn"
+     io:println("------ Start Query in Pglsn table-------");
+
+    string selectionQuery = selecionQueryMaker("pglsnTypes",columns,condition);
+
+
+        stream<record{}, error> resultStream =
+        jdbcClient->query(selectionQuery, PglsnRecord);
+
+
+    stream<PglsnRecord, sql:Error> customerStream =
+        <stream<PglsnRecord, sql:Error>>resultStream;
+    
+    error? e = customerStream.forEach(function(PglsnRecord rec) {
+        io:println("\n");
+        io:println(rec);
+        io:println(rec.pglsnType);
+        io:println("\n");
+    });
+    
+    if (e is error) {
+        io:println(e);
+    }
+
+    io:println("------ End Query in Pglsn table-------");
+
+
+}
+
+
+//.........................................................................................................
+
+
+
+
+// public type ObjectIdentifierRecord record{
+    
+//     int ID;
+//     string oidType;
+//     string regclassType;
+//     string regconfigType;
+//     string regdictionaryType;
+//     string regnamespaceType;
+//     string regoperType;
+//     string regoperatorType;
+//     string regprocType;
+//     string regprocedureType;
+//     string regroleType;
+//     string regtypeType;
+// };
+
+
+function objectIdentifierTableSelection(jdbc:Client jdbcClient, string columns = "*",string condition = "True") returns sql:Error?{
+    //         "oidType" : "oid",
+    //         "regclassType" : "regclass",
+    //         "regconfigType" : "regconfig",
+    //         "regdictionaryType" : "regdictionary",
+    //         "regnamespaceType" : "regnamespace",
+    //         "regoperType" : "regoper",
+    //         "regoperatorType" : "regoperator",
+    //         "regprocType" : "regproc",
+    //         "regprocedureType" : "regprocedure",
+    //         "regroleType" : "regrole",
+    //         "regtypeType" : "regtype"
+     io:println("------ Start Query in ObjectIdentifier table-------");
+
+    string selectionQuery = selecionQueryMaker("objectIdentifierTypes",columns,condition);
+
+
+        stream<record{}, error> resultStream =
+        jdbcClient->query(selectionQuery, ObjectIdentifierRecord);
+
+
+    stream<ObjectIdentifierRecord, sql:Error> customerStream =
+        <stream<ObjectIdentifierRecord, sql:Error>>resultStream;
+    
+    error? e = customerStream.forEach(function(ObjectIdentifierRecord rec) {
+        io:println("\n");
+        io:println(rec);
+        io:println(rec.oidType);
+        io:println(rec.regclassType);
+        io:println(rec.regconfigType);
+        io:println(rec.regdictionaryType);
+        io:println(rec.regnamespaceType);
+        io:println(rec.regoperType);
+        io:println(rec.regoperatorType);
+        io:println(rec.regprocType);
+        io:println(rec.regprocedureType);
+        io:println(rec.regroleType);
+        io:println(rec.regtypeType);
+        io:println("\n");
+    });
+    
+    if (e is error) {
+        io:println(e);
+    }
+
+    io:println("------ End Query in ObjectIdentifier table-------");
+
+
+}
+
+
+
+//.........................................................................................................
+
+
+
+
+// public type DomainRecord record{
+    
+//     int ID;
+//     int posintType;
+// };
+
+
+function domainTableSelection(jdbc:Client jdbcClient, string columns = "*",string condition = "True") returns sql:Error?{
+    // "posintType":"posint"
+     io:println("------ Start Query in Domain table-------");
+
+    string selectionQuery = selecionQueryMaker("domainTypes",columns,condition);
+
+
+        stream<record{}, error> resultStream =
+        jdbcClient->query(selectionQuery, DomainRecord);
+
+
+    stream<DomainRecord, sql:Error> customerStream =
+        <stream<DomainRecord, sql:Error>>resultStream;
+    
+    error? e = customerStream.forEach(function(DomainRecord rec) {
+        io:println("\n");
+        io:println(rec);
+        io:println(rec.posintType);
+        io:println("\n");
+    });
+    
+    if (e is error) {
+        io:println(e);
+    }
+
+    io:println("------ End Query in Domain table-------");
+
+
+}
+
+
+//.........................................................................................................
+
+
+
+// public type RangeRecord record{
+    
+//     int ID;
+//     string int4rangeType;
+//     string int8rangeType;
+//     string numrangeType;
+//     string tsrangeType;
+//     string tstzrangeType;
+//     string daterangeType;
+//     string floatrangeType;
+// };
 
 
 function rangeTableSelection(jdbc:Client jdbcClient, string columns = "*",string condition = "True") returns sql:Error?{
@@ -327,25 +701,25 @@ function rangeTableSelection(jdbc:Client jdbcClient, string columns = "*",string
 
 
 
-public type ComplexRecord record{
+// public type ComplexRecord record{
     
-    int ID;
+//     int ID;
     
-    string complexType;
-    string inventoryType;
+//     string complexType;
+//     string inventoryType;
 
-    // record{|
-    //     decimal r;
-    //     decimal i;
-    // |} complexType;
+//     // record{|
+//     //     decimal r;
+//     //     decimal i;
+//     // |} complexType;
 
-    // record{|
-    //     string name;
-    //     decimal supplier_id;
-    //     decimal price;
-    // |} inventoryType;
+//     // record{|
+//     //     string name;
+//     //     decimal supplier_id;
+//     //     decimal price;
+//     // |} inventoryType;
     
-};
+// };
 
 
 function complexTableSelection(jdbc:Client jdbcClient, string columns = "*",string condition = "True") returns sql:Error?{
@@ -386,16 +760,16 @@ function complexTableSelection(jdbc:Client jdbcClient, string columns = "*",stri
 
 //.........................................................................................................
 
-public type ArrayRecord record{
+// public type ArrayRecord record{
     
-    int ID;
-    string textArrayType;
-    string[] textArray2Type;
-    int[] integerArrayType;
-    string integerArray2Type;
-    int[5] arrayType;
-    int[] array2Type;
-};
+//     int ID;
+//     string textArrayType;
+//     string[] textArray2Type;
+//     int[] integerArrayType;
+//     string integerArray2Type;
+//     int[5] arrayType;
+//     int[] array2Type;
+// };
 
 
 function arrayTableSelection(jdbc:Client jdbcClient, string columns = "*",string condition = "True") returns sql:Error?{
@@ -449,13 +823,13 @@ function arrayTableSelection(jdbc:Client jdbcClient, string columns = "*",string
 
 
 
-public type JsonRecord record{
+// public type JsonRecord record{
     
-    int ID;
-    json jsonType;
-    json jsonbType;
-    string jsonpathType;
-};
+//     int ID;
+//     json jsonType;
+//     json jsonbType;
+//     string jsonpathType;
+// };
 
 
 function jsonTableSelection(jdbc:Client jdbcClient, string columns = "*",string condition = "True") returns sql:Error?{
@@ -500,11 +874,11 @@ function jsonTableSelection(jdbc:Client jdbcClient, string columns = "*",string 
 
 
 
-public type XmlRecord record{
+// public type XmlRecord record{
     
-    int ID;
-    string xmlType;
-};
+//     int ID;
+//     string xmlType;
+// };
 
 
 function xmlTableSelection(jdbc:Client jdbcClient, string columns = "*",string condition = "True") returns sql:Error?{
@@ -545,12 +919,11 @@ function xmlTableSelection(jdbc:Client jdbcClient, string columns = "*",string c
 
 
 
-
-public type UuidRecord record{
+// public type UuidRecord record{
     
-    int ID;
-    byte[] uuidType;
-};
+//     int ID;
+//     byte[] uuidType;
+// };
 
 
 function uuidTableSelection(jdbc:Client jdbcClient, string columns = "*",string condition = "True") returns sql:Error?{
@@ -590,14 +963,12 @@ function uuidTableSelection(jdbc:Client jdbcClient, string columns = "*",string 
 //........................................................................................................
 
 
-
-
-public type TextSearchRecord record{
+// public type TextSearchRecord record{
     
-    int ID;
-    string tsvectorType;
-    byte[] tsqueryType;
-};
+//     int ID;
+//     string tsvectorType;
+//     byte[] tsqueryType;
+// };
 
 
 function textsearchTableSelection(jdbc:Client jdbcClient, string columns = "*",string condition = "True") returns sql:Error?{
@@ -643,16 +1014,14 @@ function textsearchTableSelection(jdbc:Client jdbcClient, string columns = "*",s
 //........................................................................................................
 
 
-
-
-public type BitRecord record{
+// public type BitRecord record{
     
-    int ID;
-    string bitType;
-    decimal bitVaryType;
-    float bitVaryType2;
-    int bitOnlyType;
-};
+//     int ID;
+//     string bitType;
+//     decimal bitVaryType;
+//     float bitVaryType2;
+//     int bitOnlyType;
+// };
 
 
 function bitTableSelection(jdbc:Client jdbcClient, string columns = "*",string condition = "True") returns sql:Error?{
@@ -700,14 +1069,14 @@ function bitTableSelection(jdbc:Client jdbcClient, string columns = "*",string c
 //.......................................................................................................
 
 
-public type NetworkRecord record{
+// public type NetworkRecord record{
     
-    int ID;
-    string inetType;
-    string cidrType;
-    string macaddrType;
-    string macaddr8Type;
-};
+//     int ID;
+//     string inetType;
+//     string cidrType;
+//     string macaddrType;
+//     string macaddr8Type;
+// };
 
 
 function networkTableSelection(jdbc:Client jdbcClient, string columns = "*",string condition = "True") returns sql:Error?{
@@ -750,18 +1119,18 @@ function networkTableSelection(jdbc:Client jdbcClient, string columns = "*",stri
 
 
 
-public type GeometricRecord record{
+// public type GeometricRecord record{
     
-    int ID;
-    string pointType;
-    string lineType;
-    string lsegType;
-    string boxType;
-    string pathType;
-    string polygonType;
-    string circleType;
+//     int ID;
+//     string pointType;
+//     string lineType;
+//     string lsegType;
+//     string boxType;
+//     string pathType;
+//     string polygonType;
+//     string circleType;
 
-};
+// };
 
 
 function geometricTableSelection(jdbc:Client jdbcClient, string columns = "*",string condition = "True") returns sql:Error?{
@@ -815,12 +1184,12 @@ function geometricTableSelection(jdbc:Client jdbcClient, string columns = "*",st
 
 
 
-public type EnumRecord record{
+// public type EnumRecord record{
     
-    int ID;
-    string enumType;
+//     int ID;
+//     string enumType;
 
-};
+// };
 
 
 function enumTableSelection(jdbc:Client jdbcClient, string columns = "*",string condition = "True") returns sql:Error?{
@@ -858,12 +1227,12 @@ function enumTableSelection(jdbc:Client jdbcClient, string columns = "*",string 
 
 
 
-public type BooleanRecord record{
+// public type BooleanRecord record{
     
-    int ID;
-    boolean booleanType;
+//     int ID;
+//     boolean booleanType;
 
-};
+// };
 
 
 function BooleanTableSelection(jdbc:Client jdbcClient, string columns = "*",string condition = "True") returns sql:Error?{
@@ -900,15 +1269,15 @@ function BooleanTableSelection(jdbc:Client jdbcClient, string columns = "*",stri
 //.........................................................................................................
 
 
-public type DateTimeRecord record{
+// public type DateTimeRecord record{
     
-    int ID;
-    int timestampType;
-    int dateType;
-    int timeType;
-    string intervalType;
+//     int ID;
+//     int timestampType;
+//     int dateType;
+//     int timeType;
+//     string intervalType;
 
-};
+// };
 function dateTimeTableSelection(jdbc:Client jdbcClient, string columns = "*",string condition = "True") returns sql:Error?{
     //         "timestampType":"timestamp",
     //         "dateType":"date",
@@ -959,12 +1328,12 @@ function dateTimeTableSelection(jdbc:Client jdbcClient, string columns = "*",str
 
 
 
-public type BinaryRecord record{
+// public type BinaryRecord record{
 
-    int ID;
-    byte[] byteaType;
+//     int ID;
+//     byte[] byteaType;
 
-};
+// };
 
 function binaryTableSelection(jdbc:Client jdbcClient, string columns = "*",string condition = "True") returns sql:Error?{
         // "byteaType":"bytea" 
@@ -1009,16 +1378,16 @@ function binaryTableSelection(jdbc:Client jdbcClient, string columns = "*",strin
 
 
 //'''''''''''''''
-public type characterRecord record{
+// public type characterRecord record{
 
-    int ID;
-    string charType;
-    string varcharType;
-    string textType;
-    string nameType;
-    string charWithoutLengthType;
+//     int ID;
+//     string charType;
+//     string varcharType;
+//     string textType;
+//     string nameType;
+//     string charWithoutLengthType;
 
-};
+// };
 
 function characterTableSelection(jdbc:Client jdbcClient, string columns = "*",string condition = "True") returns sql:Error?{
     //         "charType":"char(10)",
@@ -1064,12 +1433,12 @@ function characterTableSelection(jdbc:Client jdbcClient, string columns = "*",st
 
 
 
-public type moneyRecord record{
+// public type moneyRecord record{
 
-    int ID;
-    int moneyType;
+//     int ID;
+//     int moneyType;
 
-};
+// };
 
 function moneyTableSelection(jdbc:Client jdbcClient, string columns = "*",string condition = "True") returns sql:Error?{
     // "MoneyType":"money"
@@ -1079,12 +1448,12 @@ function moneyTableSelection(jdbc:Client jdbcClient, string columns = "*",string
         stream<record{}, error> resultStream =
         jdbcClient->query(selectionQuery, moneyRecord);
 
-    io:println(resultStream);
+    // io:println(resultStream);
 
     stream<moneyRecord, sql:Error> customerStream =
         <stream<moneyRecord, sql:Error>>resultStream;
 
-        io:println(customerStream);
+        // io:println(customerStream);
 
     error? e = customerStream.forEach(function(moneyRecord rec) {
         io:println(rec);
@@ -1101,21 +1470,21 @@ function moneyTableSelection(jdbc:Client jdbcClient, string columns = "*",string
 }
 
 
-public type numericRecord record{
+// public type numericRecord record{
 
-    int ID;
-    int smallIntType;
-    int intType;
-    int bigIntType;
-    decimal decimalType;
-    decimal numericType;
-    float realType;
-    float doublePrecisionType;
-    int smallSerialType;
-    int serialType;
-    int bigSerialType;
+//     int ID;
+//     int smallIntType;
+//     int intType;
+//     int bigIntType;
+//     decimal decimalType;
+//     decimal numericType;
+//     float realType;
+//     float doublePrecisionType;
+//     int smallSerialType;
+//     int serialType;
+//     int bigSerialType;
 
-};
+// };
 
 function numericTableSelection(jdbc:Client jdbcClient, string columns = "*",string condition = "True") returns sql:Error?{
 
